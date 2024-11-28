@@ -15,4 +15,4 @@ But this turned out to not only being not very hard but also not being very fun!
 
 ### Mechanical Design
 
-I started with the mechanical design at first because it was defininatly my weakest skill. Starting with absolutly no previous knowledge with CAD was tough and solidworks is not very good for beginner, but fortunatly solidworks has some built in tutorials. The first few iterations of my designs did not include the most important thing I learned from my mechanical design journey, ***ball bearings***.
+I started with the mechanical design at first because it was defininatly my weakest skill. Starting with absolutly no previous knowledge with CAD was tough and solidworks is not very good for beginners, but fortunatly solidworks has some built in tutorials. The first few iterations of my designs did not include the most important thing I learned from my mechanical design journey, ***ball bearings***.
