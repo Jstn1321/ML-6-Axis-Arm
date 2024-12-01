@@ -87,9 +87,9 @@ void loop() {
     digitalWrite(J3dir, HIGH);
     while (joy2x > 700){
       digitalWrite(J3step,HIGH); 
-      delayMicroseconds(200);    // by changing this time delay between the steps we can change the rotation speed
+      delayMicroseconds(100);    // by changing this time delay between the steps we can change the rotation speed
       digitalWrite(J3step,LOW); 
-      delayMicroseconds(200); 
+      delayMicroseconds(100); 
       joy2x = analogRead(A2);
     }
   }
@@ -97,9 +97,9 @@ void loop() {
     digitalWrite(J3dir, LOW);
     while (joy2x < 200){
       digitalWrite(J3step,HIGH); 
-      delayMicroseconds(200);     // by changing this time delay between the steps we can change the rotation speed
+      delayMicroseconds(100);     // by changing this time delay between the steps we can change the rotation speed
       digitalWrite(J3step,LOW); 
-      delayMicroseconds(200); 
+      delayMicroseconds(100); 
       joy2x = analogRead(A2);
   }
 }
