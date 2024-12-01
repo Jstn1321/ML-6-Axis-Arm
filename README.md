@@ -1,36 +1,32 @@
+<h1 align="center">JN V1</h1>
+
+<h4 align="center">An autonomous robotic arm aimed at automated surgeries</h4>
+
+
+<h1></h1>
+
+<p align="center">
+  <a href="#assembly">Assembly</a> •
+  <a href="#how-to-use">How To Use</a> • 
+  <a href="#demo">Demo</a> •
+  <a href="#photoshoot">Photoshoot</a> •
+  <a href="#credits">Credits</a>
+</p>
+
 # **Assembly**
 
 _Under construction_
 
-# **Background**
+# **How to use**
 
-## The Build Process
+_Under construction_
 
-### The Idea
+# **Demo**
 
-I initially wanted to create an arm that could pick up objects (like the in the pictures below) and identify what the ojects were and place their own seperate boxes.
+# **Photoshoot**
+![Pic of Arm](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/20241027_181017.jpg?raw=true)
+# **Credits**
 
-
-![blue box](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/WIN_20240517_17_58_01_Pro.jpg?raw=true)
-![green box](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/WIN_20240517_17_56_25_Pro.jpg?raw=true)
-
-
-But this turned out to not only being not very hard but also not being very fun! It took me an extremley short amount of time to create and train the machine learning model, as seen in the software section below, to sort the cubes so the plan now for the robot arm <ins>***is to train a robot arm that can perform simple and effortless surgeries on patients.***</ins>
-
-### Mechanical Design
-
-I started with the mechanical design at first because it was defininatly my weakest skill. Starting with absolutly no previous knowledge with CAD was tough and solidworks is not a very good tool for beginners, fortunatly solidworks has some built in tutorials. The first few iterations of my designs did not include the most important thing I learned from my mechanical design journey, ***ball bearings***.
-
-![nobearingproblem-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/5c2a11ea-0885-499f-923d-71125fd357f1)
-
-The problem I faced with this design is the metal rod would grind against the 3d printed frame, which created a lot of friction and made a horrible sound. Ball bearings were the solution to this.
-
-
-![bearinginshoulder](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/20241007_120312.jpg?raw=true)
-
-My ball bearing design took heavy inspiration from Annin Robotics AR4 robot, which is linked here: https://www.youtube.com/watch?v=iB2NAgfVjIs. There is bearing design in all joints except for J6. 
-
-The J1, J3, J4, and J5 joints all have a 1:3 timing belt pulley to increase torque, but the instead of using the metal gear that it came with I opted to 3d print my own 60 tooth gear because of how horrible set screws are. The problem with set screws is that under high loads the set screw dug into the metal shaft I was using which allowed for the joint to become loose.
-
-
-![shaftdamage](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/20241129_1201588.jpg?raw=true)
+- [Chris Annin](https://www.anninrobotics.com/) for his work on his [AR4 Robot](https://www.youtube.com/watch?v=iB2NAgfVjIs&t=90s) which inspired me for many of my design choices.
+  
+- 
