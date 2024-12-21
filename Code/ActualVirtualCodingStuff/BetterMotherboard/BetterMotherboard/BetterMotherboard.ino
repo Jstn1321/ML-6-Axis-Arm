@@ -8,6 +8,12 @@
 #define J2dir 44
 #define J3step 45
 #define J3dir 46
+#define J4step 47
+#define J4dir 48
+#define J5step 49
+#define J5dir 50
+#define J6step 51
+#define J6dir 52
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
@@ -29,10 +35,16 @@ int joy2x;
 int joy2y;
 int joy3x;
 int joy3y;
+int joy4x;
+int joy4y;
+int joy5x;
+int joy5y;
+int joy6x;
+int joy6y;
 
-//AccelStepper stepper6(1, 51, 52); // (Type of driver: with 2 pins, STEP, DIR)
-//AccelStepper stepper5(1, 49, 50); // (Type of driver: with 2 pins, STEP, DIR)
-//AccelStepper stepper4(1, 47, 48); // (Type of driver: with 2 pins, STEP, DIR)
+AccelStepper stepper6(1, 51, 52); // (Type of driver: with 2 pins, STEP, DIR)
+AccelStepper stepper5(1, 49, 50); // (Type of driver: with 2 pins, STEP, DIR)
+AccelStepper stepper4(1, 47, 48); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper3(1, 45, 46); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper2(1, 43, 44); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper1(1, 41, 42); // (Type of driver: with 2 pins, STEP, DIR)
@@ -62,7 +74,6 @@ void setup() {
   display.getTextBounds("JN V1", 0, 0, &x, &y, &w, &h);
   booger = (SCREEN_WIDTH - w)/2;
   display.setCursor(booger, 0);
-  // Display static text
   display.println("JN V1");
   display.setTextSize(1);
   display.setCursor(0, 30);
@@ -74,23 +85,19 @@ void setup() {
 
 void loop() {
   rgbLed(0,255,0);
+  changeStatus("Status: Idle");
   joy1x = analogRead(A0);
   joy1y = analogRead(A1);
   joy2x = analogRead(A2);
+  joy2y = analogRead(A3);
+  joy3x = analogRead(A4);
+  joy3y = analogRead(A5);
   // put your main code here, to run repeatedly:
   if (joy1x > 700){
     rgbLed(255,0,0);
+    changeStatus("Status: Moving");
     digitalWrite(J1dir, HIGH);
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-    display.println("Status: Moving");
-    display.display(); 
+    
     while (joy1x > 700){
       digitalWrite(J1step,HIGH); 
       __asm__("nop\n\t");
@@ -98,172 +105,154 @@ void loop() {
       __asm__("nop\n\t");
       joy1x = analogRead(A0);
     }
-    display.setCursor(0, 50);
-  for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-  display.println("Status: Idle");
-  display.display(); 
   } 
   else if (joy1x < 200) {
     rgbLed(255,0,0);
+    changeStatus("Status: Moving");
     digitalWrite(J1dir, LOW);
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-    display.println("Status: Moving");
-    display.display(); 
+  
     while (joy1x < 200){
       digitalWrite(J1step,HIGH); 
-      __asm__("nop\n\t");    // by changing this time delay between the steps we can change the rotation speed
+      __asm__("nop\n\t");    
       digitalWrite(J1step,LOW); 
       __asm__("nop\n\t");
       joy1x = analogRead(A0);
     }
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-  display.println("Status: Idle");
-  display.display(); 
   }
   if (joy1y > 700){
     rgbLed(255,0,0);
+    changeStatus("Status: Moving");
     digitalWrite(J2dir, HIGH);
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-    display.println("Status: Moving");
-    display.display(); 
+
     while (joy1y > 700){
       digitalWrite(J2step,HIGH); 
-      delayMicroseconds(450);    // by changing this time delay between the steps we can change the rotation speed
+      delayMicroseconds(450);   
       digitalWrite(J2step,LOW); 
       delayMicroseconds(450); 
       joy1y = analogRead(A1);
     }
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-  display.println("Status: Idle");
-  display.display(); 
   }
   else if (joy1y < 200){
     rgbLed(255,0,0);
+    changeStatus("Status: Moving");
     digitalWrite(J2dir, LOW);
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-    display.println("Status: Moving");
-    display.display(); 
+    
     while (joy1y < 200){
       digitalWrite(J2step,HIGH); 
-      delayMicroseconds(450);    // by changing this time delay between the steps we can change the rotation speed
+      delayMicroseconds(450);   
       digitalWrite(J2step,LOW); 
       delayMicroseconds(450); 
       joy1y = analogRead(A1);
   }
-  display.setCursor(0, 50);
-  for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-  display.println("Status: Idle");
-  display.display(); 
 }
   if (joy2x > 700){
     rgbLed(255,0,0);
+    changeStatus("Status: Moving");
     digitalWrite(J3dir, HIGH);
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-    display.println("Status: Moving");
-    display.display(); 
+
     while (joy2x > 700){
       digitalWrite(J3step,HIGH); 
-      delayMicroseconds(100);    // by changing this time delay between the steps we can change the rotation speed
+      delayMicroseconds(100);  
       digitalWrite(J3step,LOW); 
       delayMicroseconds(100); 
       joy2x = analogRead(A2);
     }
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-  display.println("Status: Idle");
-  display.display(); 
   }
   else if (joy2x < 200){
+    changeStatus("Status: Moving");
     rgbLed(255,0,0);
     digitalWrite(J3dir, LOW);
-    display.setCursor(0, 50);
-    for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-    display.println("Status: Moving");
-    display.display(); 
+
     while (joy2x < 200){
       digitalWrite(J3step,HIGH); 
-      delayMicroseconds(100);     // by changing this time delay between the steps we can change the rotation speed
+      delayMicroseconds(100);     
       digitalWrite(J3step,LOW); 
       delayMicroseconds(100); 
       joy2x = analogRead(A2);
   }
-  display.setCursor(0, 50);
-  for (y=50; y<=57; y++)
-      {
-       for (x=0; x<127; x++)
-       {
-        display.drawPixel(x, y, BLACK); 
-       }
-      }
-  display.println("Status: Idle");
-  display.display(); 
 }
+
+  //ADJUST SPEED ACCORDINGLY I HAVENT DONE THAT YET
+ if (joy2y > 700){
+  digitalWrite(J4dir, HIGH);
+  rgbLed(255,0,0);
+  changeStatus("Status: Moving");
+
+  while (joy2y > 700){
+    digitalWrite(J4step,HIGH); 
+    delayMicroseconds(600);     
+    digitalWrite(J4step,LOW); 
+    delayMicroseconds(600); 
+    joy2y = analogRead(A3);
+  }
+ }
+  else if (joy2y < 200) {
+    digitalWrite(J4dir, LOW);
+    rgbLed(255,0,0);
+    changeStatus("Status: Moving");
+
+    while (joy2y < 200){
+      digitalWrite(J4step,HIGH); 
+      delayMicroseconds(500);     
+      digitalWrite(J4step,LOW); 
+      delayMicroseconds(500); 
+      joy2y = analogRead(A3);
+    }
+  }
+
+  if (joy3x > 700){
+  digitalWrite(J5dir, HIGH);
+  rgbLed(255,0,0);
+  changeStatus("Status: Moving");
+
+  while (joy3x > 700){
+    digitalWrite(J5step,HIGH); 
+    delayMicroseconds(100);     
+    digitalWrite(J5step,LOW); 
+    delayMicroseconds(100); 
+    joy3x = analogRead(A4);
+  }
+ }
+  else if (joy3x < 200) {
+    digitalWrite(J5dir, LOW);
+    rgbLed(255,0,0);
+    changeStatus("Status: Moving");
+
+    while (joy3x < 200){
+      digitalWrite(J5step,HIGH); 
+      delayMicroseconds(100);     
+      digitalWrite(J5step,LOW); 
+      delayMicroseconds(100); 
+      joy3x = analogRead(A4);
+    }
+  }
+
+  if (joy3y > 700){
+  digitalWrite(J6dir, HIGH);
+  rgbLed(255,0,0);
+  changeStatus("Status: Moving");
+
+  while (joy3y > 700){
+    digitalWrite(J6step,HIGH); 
+    delayMicroseconds(1000);     
+    digitalWrite(J6step,LOW); 
+    delayMicroseconds(1000); 
+    joy3y = analogRead(A5);
+  }
+ }
+  else if (joy3y < 200) {
+    digitalWrite(J6dir, LOW);
+    rgbLed(255,0,0);
+    changeStatus("Status: Moving");
+
+    while (joy3y < 200){
+      digitalWrite(J6step,HIGH); 
+      delayMicroseconds(1000);     
+      digitalWrite(J6step,LOW); 
+      delayMicroseconds(1000); 
+      joy3y = analogRead(A5);
+    }
+  }
 }
 
 void rgbLed (int r, int g, int b){
@@ -271,3 +260,18 @@ void rgbLed (int r, int g, int b){
   analogWrite(9, b);
   analogWrite(10, g);
 }
+
+void changeStatus (String message){
+  display.setCursor(0, 50);
+  for (y=50; y<=57; y++)
+      {
+       for (x=0; x<127; x++)
+       {
+        display.drawPixel(x, y, BLACK); 
+       }
+      }
+  display.println(message);
+  display.display(); 
+}
+//TO DO: MAKE A FUNCTION FOR ALL THIS CRAP
+
