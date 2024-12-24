@@ -1,0 +1,138 @@
+<robot name = "JN_V1">
+	<link name = "base">
+		<visual>
+			<origin xyz = "-0.06987 0 0.020" rpy = "0 0 0"/>
+			<geometry>
+				<box size = "0.27975 0.140 0.040" rpy = "0 0 0"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<link name = "base_link">
+		<visual>
+			<origin xyz = "0 0 0.074" rpy = "0 0 0"/>
+			<geometry>
+				<cylinder length = "0.068" radius = "0.05022"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name="fixedBase" type="fixed">
+    	<parent link="base"/>
+    	<child link="base_link"/>
+   		<origin xyz = "0 0 0" rpy = "0 0 0"/>
+  	</joint>
+
+	<link name = "shoulder_mount">
+		<visual>
+          <origin xyz = "0.03529 0 0.040" rpy = "0 0 0"/>
+			<geometry>
+				<box size = "0.17102 0.10044 0.088"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name = "base_rot" type = "revolute">
+		<parent link = "base_link"/>
+		<child link = "shoulder_mount"/>
+		<origin xyz = "0 0 0.112" rpy = "0 0 0"/>
+		<axis xyz = "0 0 -1"/>
+	</joint>
+
+	<link name = "humorus">
+		<visual>
+          <origin xyz = "0 0.011 0.100" rpy = "0 0 0"/>
+			<geometry>
+				<box size = "0.06554 0.022 0.26554"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name = "shoulder_rot" type = "revolute">
+		<parent link = "shoulder_mount"/>
+		<child link = "humorus"/>
+		<origin xyz = "0.07515 0.05022 0.040" rpy = "0 1.57 0"/>
+		<axis xyz = "0 -1 0"/>
+
+	</joint>
+
+	<link name = "extrudeHumorus">
+		<visual>
+          <origin xyz = "0 0 0" rpy = "1.57 0 0"/>
+			<geometry>
+				<cylinder length = "0.013" radius = "0.032767"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name="fixedHumorus" type="fixed">
+    	<parent link="humorus"/>
+    	<child link="extrudeHumorus"/>
+   		<origin xyz = "0 -0.0065 0.200" rpy = "0 0 0"/>
+  	</joint>
+
+	<link name = "elbow">
+		<visual>
+          <origin xyz = "0 0 0.0245" rpy = "0 0 0"/>
+			<geometry>
+				<box size = "0.056 0.025 0.105"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name = "elbow_rot" type = "revolute">
+		<parent link = "extrudeHumorus"/>
+		<child link = "elbow"/>
+		<origin xyz = "0 -0.019 0" rpy = "0 0 0"/>
+		<axis xyz = "0 -1 0"/>
+	</joint>
+
+	<link name = "radiulna">
+		<visual>
+          <origin xyz = "0 0 0.054665" rpy = "0 0 0"/>
+			<geometry>
+				<box size = "0.064 0.055 0.10933"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name = "elbow_twist" type = "revolute">
+		<parent link = "elbow"/>
+		<child link = "radiulna"/>
+		<origin xyz = "0 0 0.077" rpy = "0 0 0"/>
+		<axis xyz = "0 0 -1"/>
+	</joint>
+
+	<link name = "wrist">
+		<visual>
+          <origin xyz = "0 0 0.02975" rpy = "0 0 0"/>
+			<geometry>
+				<box size = "0.055 0.056 0.0595"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name = "wrist_rot" type = "revolute">
+		<parent link = "radiulna"/>
+		<child link = "wrist"/>
+		<origin xyz = "0 0 0.10933" rpy = "0 0 0"/>
+		<axis xyz = "0 -1 0"/>
+	</joint>
+
+	<link name = "gripper">
+		<visual>
+          <origin xyz = "0 0 0.119" rpy = "0 0 0"/>
+			<geometry>
+				<box size = "0.098 0.055 0.119"/>
+			</geometry>
+		</visual>
+	</link>
+
+	<joint name = "wrist_twist" type = "revolute">
+		<parent link = "wrist"/>
+		<child link = "gripper"/>
+		<origin xyz = "0 0 0" rpy = "0 0 0"/>
+		<axis xyz = "0 0 -1"/>
+	</joint>
+
+</robot>
