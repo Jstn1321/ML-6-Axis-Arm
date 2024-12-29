@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+    <title>JNV1</title>
+    <link rel="stylesheet" href="node_modules/boxicons/css/boxicons.min.css">
+    <link rel="stylesheet" href="style.css">
+
+  </head>
+  <body>
+      <div class = "sidebar">
+        <div class = "subtitle">
+          <i class='bx bxl-python'></i>
+          <span>JNV1</span>
+          </div>
+          <i class="bx bx-menu" id="btn"></i>
+          <ul>
+            <li>
+              <a href="#">
+                <i class='bx bxs-joystick-button' ></i>
+                <span class="tab">Manual</span>
+              </a>
+              <span class="tooltip">Manual</span>
+            </li>
+            <li>
+              <a href="#">
+                <i class='bx bxl-android'></i>
+                <span class="tab">Automatic</span>
+              </a>
+              <span class="tooltip">Automatic</span>
+            </li>
+          </ul>
+      </div>
+
+      <div class="main-content">
+        <div class="container">
+          <h1>PUT STUFF HERE</h1>
+        </div>
+      </div>
+
+  </body>
+
+<script>    
+  let btn = document.querySelector('#btn');
+  let sidebar = document.querySelector('.sidebar');
+
+  btn.onclick= function () {
+    sidebar.classList.toggle('active');
+  };
+</script>
+
+</html>
