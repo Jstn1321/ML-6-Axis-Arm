@@ -12,10 +12,10 @@ train_green_dir = os.path.join('./bog/green')
 train_blue_dir = os.path.join('./bog/blue')
 
 train_green_names = os.listdir(train_green_dir)
-print(train_green_names[:10])
+print(train_green_names[:100])
 
 train_blue_names = os.listdir(train_blue_dir)
-print(train_blue_names[:10])
+print(train_blue_names[:100])
 
 print('green:', len(os.listdir(train_green_dir)))
 print('blue:', len(os.listdir(train_blue_dir)))
@@ -91,8 +91,8 @@ train_generator = train_datagen.flow_from_directory(
 
 history = model.fit(
       train_generator,
-      steps_per_epoch=62,
-      epochs=50,
+      steps_per_epoch=43,
+      epochs=5,
       verbose=1)
 
 
