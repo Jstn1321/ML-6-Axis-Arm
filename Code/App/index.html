@@ -58,7 +58,6 @@
 
         <div class="console" id="console-box">
           <div class="message"></div>
-          <!-- More messages will appear here -->
         </div>
       </div>
 
@@ -91,7 +90,7 @@
         newMessage.classList.add('message');
         newMessage.textContent = message;
         consoleBox.appendChild(newMessage);
-        consoleBox.scrollTop = consoleBox.scrollHeight; // Scroll to the bottom
+        consoleBox.scrollTop = consoleBox.scrollHeight; 
       }
 
       document.getElementById('takePic').addEventListener('click', function() {

@@ -230,29 +230,29 @@
 
 .image-container {
     display: flex;
-    align-items: center; /* Center the content vertically */
-    gap: 1rem; /* Space between image and buttons */
+    align-items: center;
+    gap: 1rem; 
 }
 
 .image {
-    width: 600px; /* Adjust the size of the image */
+    width: 600px; 
     height: auto;
 }
 
 .console {
     width: 100%;
-    height: 150px; /* Adjust the height as needed */
-    background-color: #1e1e1e; /* Dark background similar to IDEs */
-    color: #fff; /* White text color */
-    font-family: 'Courier New', monospace; /* Monospaced font for console look */
+    height: 150px; 
+    background-color: #1e1e1e; 
+    color: #fff; 
+    font-family: 'Courier New', monospace; 
     padding: 1rem;
     border-radius: 5px;
     margin-top: 1rem;
-    overflow-y: auto; /* Enable scrolling if content exceeds the box height */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    overflow-y: auto; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
 }
 
 .console .message {
     margin-bottom: 0.5rem;
-    word-wrap: break-word; /* Ensure long text wraps properly */
+    word-wrap: break-word; 
 }
