@@ -1,6 +1,6 @@
 <h1 align="center">JN V1</h1>
 
-<h4 align="center">An autonomous robotic arm aimed at automated surgeries</h4>
+<h4 align="center">A 3D printable robotic arm with machine learning capabilities</h4>
 
 
 <h1></h1>
@@ -29,4 +29,4 @@ _Under construction_
 
 - [Chris Annin](https://www.anninrobotics.com/) for his work on his [AR4 Robot](https://www.youtube.com/watch?v=iB2NAgfVjIs&t=90s) which inspired me for many of my design choices.
   
-- 
+- [Code Commerce](https://www.youtube.com/@codecommerce) for his design on the [interactive sidebar](https://www.youtube.com/watch?v=uy1tgKOnPB0) which is probably the coolest part of the GUI.
