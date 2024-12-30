@@ -1,6 +1,6 @@
 <h1 align="center">JN V1</h1>
 
-<h4 align="center">An autonomous robotic arm with machine learning capabilities</h4>
+<h4 align="center">A 3D printable robotic arm with machine learning capabilities</h4>
 
 
 <h1></h1>
