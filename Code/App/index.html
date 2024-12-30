@@ -1,52 +1,108 @@
 <!DOCTYPE html>
 <html>
   <head>
-    
     <title>JNV1</title>
     <link rel="stylesheet" href="node_modules/boxicons/css/boxicons.min.css">
     <link rel="stylesheet" href="style.css">
-
   </head>
   <body>
-      <div class = "sidebar">
-        <div class = "subtitle">
-          <i class='bx bxl-python'></i>
-          <span>JNV1</span>
-          </div>
-          <i class="bx bx-menu" id="btn"></i>
-          <ul>
-            <li>
-              <a href="#">
-                <i class='bx bxs-joystick-button' ></i>
-                <span class="tab">Manual</span>
-              </a>
-              <span class="tooltip">Manual</span>
-            </li>
-            <li>
-              <a href="#">
-                <i class='bx bxl-android'></i>
-                <span class="tab">Automatic</span>
-              </a>
-              <span class="tooltip">Automatic</span>
-            </li>
-          </ul>
+    <div class="sidebar">
+      <div class="subtitle">
+        <i class='bx bxl-python'></i>
+        <span class="bold"> JNV1</span>
       </div>
+      <i class="bx bx-menu" id="btn"></i>
+      <ul>
+        <li>
+          <a href="#" id="manual-tab">
+            <i class='bx bxs-joystick-button'></i>
+            <span class="tab">Manual</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" id="automatic-tab">
+            <i class='bx bxl-android'></i>
+            <span class="tab">Automatic</span>
+          </a>
+        </li>
+      </ul>
+    </div>
 
-      <div class="main-content">
-        <div class="container">
-          <h1>PUT STUFF HERE</h1>
+    <div class="main-content">
+
+      <div id="manual-content" class="content">
+
+        <h1>Manual Mode Content</h1>
+
+        </div>
+
+        <div id="automatic-content" class="content" style="display: none;">
+
+          <div class="image-container">
+
+          <img src="./assets/images/filename.jpg" alt="mlPic" class="image">
+          <div class="buttons">
+          <button class="button" id="takePic">
+            <span>Take a Picture</span>
+          </button>
+          
+          <button class="button" id="id">
+            <span>Identify</span>
+          </button>
+          
+          <button class="button" id="sort">
+            <span>Sort</span>
+          </button>
+        </div>
+        </div>
+
+        <div class="console" id="console-box">
+          <div class="message"></div>
+          <!-- More messages will appear here -->
         </div>
       </div>
 
+    <script>
+      let btn = document.querySelector('#btn');
+      let sidebar = document.querySelector('.sidebar');
+
+      btn.onclick = function () {
+        sidebar.classList.toggle('active');
+      };
+
+      const manualTab = document.querySelector('#manual-tab');
+      const automaticTab = document.querySelector('#automatic-tab');
+      const manualContent = document.querySelector('#manual-content');
+      const automaticContent = document.querySelector('#automatic-content');
+
+      manualTab.onclick = function () {
+        manualContent.style.display = 'block';
+        automaticContent.style.display = 'none';
+      };
+
+      automaticTab.onclick = function () {
+        manualContent.style.display = 'none';
+        automaticContent.style.display = 'block';
+      };
+
+      function addMessage(message) {
+        const consoleBox = document.getElementById('console-box');
+        const newMessage = document.createElement('div');
+        newMessage.classList.add('message');
+        newMessage.textContent = message;
+        consoleBox.appendChild(newMessage);
+        consoleBox.scrollTop = consoleBox.scrollHeight; // Scroll to the bottom
+      }
+
+      document.getElementById('takePic').addEventListener('click', function() {
+        addMessage('Taking Picture...');
+      });
+      document.getElementById('id').addEventListener('click', function() {
+        addMessage('Identifying...');
+      });
+      document.getElementById('sort').addEventListener('click', function() {
+        addMessage('Sorting...');
+      });
+    </script>
   </body>
-
-<script>    
-  let btn = document.querySelector('#btn');
-  let sidebar = document.querySelector('.sidebar');
-
-  btn.onclick= function () {
-    sidebar.classList.toggle('active');
-  };
-</script>
-
 </html>
