@@ -1,6 +1,6 @@
 <h1 align="center">JN V1</h1>
 
-<h4 align="center">An autonomous robotic arm aimed at automated surgeries</h4>
+<h4 align="center">An autonomous robotic arm with machine learnign capabilities</h4>
 
 
 <h1></h1>
