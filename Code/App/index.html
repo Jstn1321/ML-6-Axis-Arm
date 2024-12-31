@@ -29,40 +29,39 @@
     </div>
 
     <div class="main-content">
-
       <div id="manual-content" class="content">
-
         <h1>Manual Mode Content</h1>
+      </div>
 
-        </div>
-
-        <div id="automatic-content" class="content" style="display: none;">
-
-          <div class="image-container">
-
-          <img src="./scripts/assets/takenPic/filename.jpg" alt="mlPic" class="image">
+      <div id="automatic-content" class="content" style="display: none;">
+        <div class="image-container">
+          <img id="mlPic" src="./scripts/assets/takenPic/filename.jpg" alt="mlPic" class="image">
           <div class="buttons">
-          <button class="button" id="takePic">
-            <span>Take a Picture</span>
-          </button>
-          
-          <button class="button" id="id">
-            <span>Identify</span>
-          </button>
-          
-          <button class="button" id="sort">
-            <span>Sort</span>
-          </button>
-        </div>
+            <button class="button" id="takePic">
+              <span>Take a Picture</span>
+            </button>
+            <button class="button" id="id">
+              <span>Identify</span>
+            </button>
+            <button class="button" id="sort">
+              <span>Sort</span>
+            </button>
+          </div>
         </div>
 
         <div class="console" id="console-box">
           <div class="message"></div>
         </div>
       </div>
+    </div>
 
     <script>
-      const { exec } = require('child_process');
+      const { ipcRenderer } = require('electron');
+      const imageElement = document.getElementById("mlPic");
+      const manualTab = document.querySelector('#manual-tab');
+      const automaticTab = document.querySelector('#automatic-tab');
+      const manualContent = document.querySelector('#manual-content');
+      const automaticContent = document.querySelector('#automatic-content');
       
       let btn = document.querySelector('#btn');
       let sidebar = document.querySelector('.sidebar');
@@ -70,11 +69,6 @@
       btn.onclick = function () {
         sidebar.classList.toggle('active');
       };
-
-      const manualTab = document.querySelector('#manual-tab');
-      const automaticTab = document.querySelector('#automatic-tab');
-      const manualContent = document.querySelector('#manual-content');
-      const automaticContent = document.querySelector('#automatic-content');
 
       manualTab.onclick = function () {
         manualContent.style.display = 'block';
@@ -92,20 +86,32 @@
         newMessage.classList.add('message');
         newMessage.textContent = message;
         consoleBox.appendChild(newMessage);
-        consoleBox.scrollTop = consoleBox.scrollHeight; 
+        consoleBox.scrollTop = consoleBox.scrollHeight;
       }
 
       document.getElementById('takePic').addEventListener('click', function() {
         addMessage('Taking Picture...');
-        exec('scripts/identify.py');
-      });
-      document.getElementById('id').addEventListener('click', function() {
-        addMessage('Identifying...');
-      });
-      document.getElementById('sort').addEventListener('click', function() {
-        addMessage('Sorting...');
+        ipcRenderer.send('takePic');
+        
+        ipcRenderer.once('update', (event, imagePath) => {
+          const timestamp = new Date().getTime(); 
+          imageElement.src = `${imagePath}?${timestamp}`; 
+        });
       });
 
+      document.getElementById('id').addEventListener('click', function() {
+        addMessage('Identifying...');
+        ipcRenderer.send('identify');
+      });
+
+      document.getElementById('sort').addEventListener('click', function() {
+        addMessage('Sorting...');
+        ipcRenderer.send('sort');
+      });
+
+      ipcRenderer.on('console-message', (event, message) =>{
+        addMessage(message);
+      });
     </script>
   </body>
 </html>
