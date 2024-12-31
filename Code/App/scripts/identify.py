@@ -9,13 +9,15 @@ import sys
 from PIL import Image
 import cv2
 
-model = tf.keras.models.load_model('assets/MLModel/myModel.keras')
-
-images = os.listdir("assets/takenPic/")
+model_path = os.path.join(os.path.dirname(__file__), 'assets/MLModel/myModel.keras')
+model = tf.keras.models.load_model(model_path)
+image_path = os.path.join(os.path.dirname(__file__), "assets/takenPic/")
 blue = False
+images = os.listdir(image_path)
 
 for i in images:
-        path = 'assets/takenPic/' + i
+        
+        path = image_path + i
         img = load_img(path, target_size=(300, 300))
         x = img_to_array(img)
         x /= 255
@@ -23,36 +25,15 @@ for i in images:
         x = np.expand_dims(x, axis=0)
 
         images = np.vstack([x])
-        classes = model.predict(images, batch_size=1)
-        print(classes[0])
+        classes = model.predict(images, batch_size=1, verbose = 0)
+        #print(classes[0])
         if classes[0]>0.5:
-            print(i + " is a green box")
+            #print(i + " is a green box")
+            print("This is a green box!")
+            sys.stdout.flush()
             blue = False
         else:
-            print(i + " is a blue box")
+            #print(i + " is a blue box")
+            print("This is a blue box!")
+            sys.stdout.flush()
             blue = True
-
-
-
-im = Image.open('assets/takenPic/filename.jpg', 'r')
-pix_val = list(im.getdata())
-imga = [list(ele) for ele in pix_val]
-#imga = np.array(cv2.imread('PycharmProjects/ImplementModel/bog/liveTest/filename.jpg'))
-imgaG = []
-imgaB = []
-where_list = 0
-if (blue == False):
-        for k in range(len(imga)):
-            imgaG.append(imga[k][1])
-        #print(imgaG)
-        where_list = imgaG.index(max(imgaG))
-        where_list = where_list + 1
-        print(where_list)
-
-if (blue == True):
-        for k in range(len(imga)):
-                imgaB.append(imga[k][2])
-        #print(imgaB)
-        where_list = imgaB.index(max(imgaB))
-        where_list = where_list + 1
-        print(where_list)
