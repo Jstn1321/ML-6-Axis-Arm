@@ -40,7 +40,7 @@
 
           <div class="image-container">
 
-          <img src="./assets/images/filename.jpg" alt="mlPic" class="image">
+          <img src="./scripts/assets/takenPic/filename.jpg" alt="mlPic" class="image">
           <div class="buttons">
           <button class="button" id="takePic">
             <span>Take a Picture</span>
@@ -62,6 +62,8 @@
       </div>
 
     <script>
+      const { exec } = require('child_process');
+      
       let btn = document.querySelector('#btn');
       let sidebar = document.querySelector('.sidebar');
 
@@ -95,6 +97,7 @@
 
       document.getElementById('takePic').addEventListener('click', function() {
         addMessage('Taking Picture...');
+        exec('scripts/identify.py');
       });
       document.getElementById('id').addEventListener('click', function() {
         addMessage('Identifying...');
@@ -102,6 +105,7 @@
       document.getElementById('sort').addEventListener('click', function() {
         addMessage('Sorting...');
       });
+
     </script>
   </body>
 </html>
