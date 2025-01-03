@@ -7,6 +7,7 @@ import cv2
 from identify import blue
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
+import sendInvKine
 
 im = Image.open(os.path.join(os.path.dirname(__file__), "assets/takenPic/filename.jpg"), 'r')
 pix_val = list(im.getdata())
@@ -36,8 +37,11 @@ temp = where_list - row
 column = where_list - ((row*300)+1)
 row = row + 7
 column+= 10
-print(row)
-print(column)
+
+print("X: " + column)
+print("Y " + row)
+
+sendInvKine.sendInvKineToArd()
 
 plt.title("Box Image")
 plt.xlabel("X pixel scaling")
