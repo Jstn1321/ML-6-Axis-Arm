@@ -3,10 +3,9 @@ import time
 import invKine
 import numpy
 
-# Configure the serial connection
 arduino = serial.Serial(port='COM5', baudrate=115200, timeout=1)
-time.sleep(2)  # Allow time for the connection to initialize
-
+time.sleep(2)  
+"""
 # Generate joint angles
 jointAngles = invKine.ik([0.52, 0.1, 0.3])
 
@@ -21,3 +20,7 @@ while True:
     if response:
         jointAngles = list(map(float, response.split(',')))
         print(jointAngles)
+"""
+def sendInvKineToArd (list = []):
+    data_string = ','.join(map(str, invKine.ik(list))) + '\n'
+    arduino.write(data_string.encode()) 
