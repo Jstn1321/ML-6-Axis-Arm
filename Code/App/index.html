@@ -73,11 +73,13 @@
       manualTab.onclick = function () {
         manualContent.style.display = 'block';
         automaticContent.style.display = 'none';
+        ipcRenderer.send('manual');
       };
 
       automaticTab.onclick = function () {
         manualContent.style.display = 'none';
         automaticContent.style.display = 'block';
+        ipcRenderer.send('auto');
       };
 
       function addMessage(message) {

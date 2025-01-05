@@ -53,6 +53,30 @@ ipcMain.on('sort', (event) => {
   });
 });
 
+ipcMain.on('auto', (event) => {
+  exec('cmd.exe /c "conda activate tf && python ./scripts/setAuto.py"', (err, stdout, stderr) => {
+    if (err) {
+      console.error(`exec error: ${err}`);
+      event.reply('console-message', `Error: ${stderr}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    event.reply('console-message', `${stdout}`);
+  });
+});
+
+ipcMain.on('manual', (event) => {
+  exec('cmd.exe /c "conda activate tf && python ./scripts/setManual.py"', (err, stdout, stderr) => {
+    if (err) {
+      console.error(`exec error: ${err}`);
+      event.reply('console-message', `Error: ${stderr}`);
+      return;
+    }
+    console.log(`stdout: ${stdout}`);
+    event.reply('console-message', `${stdout}`);
+  });
+});
+
 app.whenReady().then(() => {
   createWindow();
 
