@@ -25,10 +25,12 @@ byte booger;
 int16_t x,y;
 uint16_t w,h;
 
-ezButton joy1Button(53);
-int switchJoy1Val = 1;
+bool manual = true;
+
+String receivedData;
+
 int steps[6] = {0,0,0,0,0,0};
-String dataToSend = "";
+
 int joy1x;
 int joy1y;
 int joy2x;
@@ -53,7 +55,6 @@ AccelStepper stepper2(1, 43, 44); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper1(1, 41, 42); // (Type of driver: with 2 pins, STEP, DIR)
 
 void setup() {
-  joy1Button.setDebounceTime(50);
   pinMode(27, OUTPUT);
   pinMode(14, OUTPUT);
   pinMode(25, OUTPUT);
@@ -87,9 +88,14 @@ void setup() {
 }
 
 void loop() {
-  joy1Button.loop();
-  if (switchJoy1Val == 1){
-
+  
+  if (manual){
+  if (Serial.available() > 0) {
+    receivedData = Serial.readStringUntil('\n'); 
+    if (receivedData.equals("a")){
+      manual = false;
+    }
+  }
   rgbLed(0,255,0);
   changeStatus("Status: Idle");
 
@@ -99,9 +105,6 @@ void loop() {
   joy2y = analogRead(A3);
   joy3x = analogRead(A4);
   joy3y = analogRead(A5);
-  if (joy1Button.isPressed()){
-    switchJoy1Val = 0;
-  }
 
   if (joy1x > 700){
     rgbLed(255,0,0);
@@ -264,34 +267,30 @@ void loop() {
     }
     }
   }
-  else {
-  /*
-    rgbLed(0,0,255);
-    delay(1000);
-    rgbLed(0,255,0);*/
-    
-  if (joy1Button.isPressed()){
-    switchJoy1Val = 0;
-  }
-
+  
+  if (manual == false) {
   if (Serial.available() > 0) {
+    receivedData = Serial.readStringUntil('\n'); 
+    if (receivedData.length() == 1 && receivedData.equals("m")){
+      manual = true;
+    }
+    rgbLed(0,0,255);
+    changeMode("Sdrg");
     int startingPoint = 0;
     int commaPoint = 0;
-    float itemInData = 0.0;  // Use float to store the angles
-    float jointAngles[8];    // Array to store parsed numbers
+    float itemInData = 0.0; 
+    float jointAngles[8];  
     int jointAnglesIndex = 0;
 
-    // Read the incoming data
-    String data = Serial.readStringUntil('\n');  // Read until newline
-
-    // Process the data
-    for (int i = 0; i < data.length(); i++) {
-      if (data[i] == ',') {
+    
+  if (receivedData.length() > 1){
+    for (int i = 0; i < receivedData.length(); i++) {
+      if (receivedData[i] == ',') {
         commaPoint = i;
-        String temp = data.substring(startingPoint, commaPoint);
+        String temp = receivedData.substring(startingPoint, commaPoint);
         temp.trim();
-        itemInData = temp.toFloat();  // Use toFloat() for floating-point numbers
-        if (jointAnglesIndex < 8) {  // Avoid overflow
+        itemInData = temp.toFloat(); 
+        if (jointAnglesIndex < 8) {  
           jointAngles[jointAnglesIndex] = itemInData;
           jointAnglesIndex++;
         }
@@ -299,27 +298,16 @@ void loop() {
       }
     }
 
-    // Process the last number (after the last comma)
-    if (startingPoint < data.length()) {
-      String temp = data.substring(startingPoint);
+    if (startingPoint < receivedData.length()) {
+      String temp = receivedData.substring(startingPoint);
       temp.trim();
       itemInData = temp.toFloat();
-      if (jointAnglesIndex < 8) {  // Avoid overflow
+      if (jointAnglesIndex < 8) { 
         jointAngles[jointAnglesIndex] = itemInData;
         jointAnglesIndex++;
       }
     }
-
-  //Send current the step count for each motor
-  
-  String sendData = "";
-for (int i = 0; i < 6; i++) {
-  sendData += String(steps[i]);
-  if (i < 5) {  // Only add a comma if it's not the last element
-    sendData += ",";
-  }
-}
-  Serial.print(sendData);
+    }
   }
 }
 }
@@ -342,5 +330,18 @@ void changeStatus (String message){
   display.println(message);
   display.display(); 
 }
-//TO DO: MAKE A FUNCTION FOR ALL THIS CRAP
+
+void changeMode (String message){
+  display.setCursor(0, 30);
+  for (y=30; y<=57; y++)
+      {
+       for (x=0; x<127; x++)
+       {
+        display.drawPixel(x, y, BLACK); 
+       }
+      }
+  display.println(message);
+  display.display(); 
+}
+//TO DO: MAKE A FUNCTION FOR MANUAL MOVEMENT OF THE MOTORS (maybe)
 
