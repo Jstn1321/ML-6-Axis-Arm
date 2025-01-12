@@ -128,7 +128,7 @@
   background: none;
   cursor: pointer;
   width: 150px;
-  height: 130px;
+  height: 90px;
 
   font-size: 0.75rem;
   font-weight: 700;
@@ -224,6 +224,35 @@
 }
 
 #sort:hover:after {
+  width: 200%;
+  padding-top: 200%;
+}
+
+#picsort {
+  position: relative;
+  overflow: hidden;
+}
+
+#picsort span {
+  position: relative;
+  z-index: 2;
+}
+
+#picsort:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  width: 0;
+  height: 0;
+  background-color: #1a1a1a;
+  border-radius: 999px;
+  transition: 0.5s ease-out;
+}
+
+#picsort:hover:after {
   width: 200%;
   padding-top: 200%;
 }
