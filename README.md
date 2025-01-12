@@ -30,3 +30,5 @@ _Under construction_
 - [Chris Annin](https://www.anninrobotics.com/) for his work on his [AR4 Robot](https://www.youtube.com/watch?v=iB2NAgfVjIs&t=90s) which inspired me for many of my design choices.
   
 - [Code Commerce](https://www.youtube.com/@codecommerce) for his design on the [interactive sidebar](https://www.youtube.com/watch?v=uy1tgKOnPB0) which is probably the coolest part of the GUI.
+
+- [Tyler Potts](https://www.youtube.com/@TylerPotts) for his cool [button design](https://github.com/TylerPottsDev/yt-css-buttons) which was used generously in the GUI.
