@@ -30,7 +30,7 @@ ipcMain.on('takePic', (event) => {
 });
 
 ipcMain.on('identify', (event) => {
-  exec('cmd.exe /c "conda activate tf && python ./scripts/identify.py"', (err, stdout, stderr) => {
+  exec('cmd.exe /c "conda activate tf && python ./scripts/idYOLO.py"', (err, stdout, stderr) => {
     if (err) {
       console.error(`exec error: ${err}`);
       event.reply('console-message', `Error: ${stderr}`);
@@ -42,7 +42,7 @@ ipcMain.on('identify', (event) => {
 });
 
 ipcMain.on('sort', (event) => {
-  exec('cmd.exe /c "conda activate tf && python ./scripts/sort.py"', (err, stdout, stderr) => {
+  exec('cmd.exe /c "conda activate tf && python ./scripts/sortYOLO.py"', (err, stdout, stderr) => {
     if (err) {
       console.error(`exec error: ${err}`);
       event.reply('console-message', `Error: ${stderr}`);
