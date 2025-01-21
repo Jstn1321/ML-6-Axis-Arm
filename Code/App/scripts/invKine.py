@@ -8,13 +8,23 @@ import numpy as np
 import ikpy.utils.plot as plot_utils
 from ikpy.chain import Chain
 from ikpy.link import OriginLink, URDFLink
+import math
 JNV1_chain = ikpy.chain.Chain.from_urdf_file(r"C:\Nerd Projects\RobotArmProject\Code\App\scripts\assets\URDF\armURDF.urdf", active_links_mask=[False, True, True, False, True, True, True, True])
 #MAX EXTENSION LENGTH: 71.5cm
 np.set_printoptions(suppress=True, precision=6)
 target_orientation = [0, 0, -1]
 orientation_axis = "Z"
 def ik(xyz):
-    return JNV1_chain.inverse_kinematics(target_position=xyz, target_orientation=target_orientation,orientation_mode=orientation_axis).tolist()
+    invKine = JNV1_chain.inverse_kinematics(target_position=xyz, target_orientation=target_orientation,orientation_mode=orientation_axis).tolist()
+    for i in range(0,len(invKine)):
+        invKine[i] = math.degrees(invKine[i])
+    invKine[0] = (invKine[0]/360) * (50 * 4397/4913)
+    invKine[1] = (invKine[1]/360) * (15 * 3/10)
+    invKine[2] = (invKine[2]/360) * (26 * 103/121)
+    invKine[3] = (invKine[3]/360) * (5 * 2/11)
+    invKine[4] = (invKine[4]/360) * (13.73)
+    invKine[5] = (invKine[5]/360) * (1600)
+    return invKine
 """
 target_position = [0.2 ,0.1, 0.54]
 target_orientation = [0, -1, 0]
