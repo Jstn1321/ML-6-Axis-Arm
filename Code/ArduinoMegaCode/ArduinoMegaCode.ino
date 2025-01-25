@@ -20,6 +20,12 @@
 #define J6dir 52
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
+#define limitJ1 28
+#define limitJ2 29
+#define limitJ3 30
+#define limitJ4 31
+#define limitJ5 32
+#define limitJ6 33
 
 byte booger;
 int16_t x,y;
@@ -43,6 +49,8 @@ int joy5x;
 int joy5y;
 int joy6x;
 int joy6y;
+
+int firstRun = true;
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
@@ -89,6 +97,16 @@ void setup() {
 
 void loop() {
   
+  if (firstRun == true){
+    caliJ1(1000); //IDK HOW FAST
+    caliJ2(1000); //IDK HOW FAST
+    caliJ3(1000); //IDK HOW FAST
+    caliJ4(1000); //IDK HOW FAST
+    caliJ5(1000); //IDK HOW FAST
+    caliJ6(1000); //IDK HOW FAST
+    firstRun = false;
+  }
+
   if (manual){
   if (Serial.available() > 0) {
     receivedData = Serial.readStringUntil('\n'); 
@@ -343,5 +361,111 @@ void changeMode (String message){
   display.println(message);
   display.display(); 
 }
-//TO DO: MAKE A FUNCTION FOR MANUAL MOVEMENT OF THE MOTORS (maybe)
 
+void caliJ1(int accel){
+  int limitVal = analogRead(limitJ1);
+  int stepsInRev = (50 + (4397/4913))* 1600;
+  stepper1.setAcceleration(accel);
+  stepper1.setCurrentPosition(0);
+  stepper1.moveTo(stepsInRev);
+  while (limitVal == LOW){
+    stepper1.run();
+    limitVal = analogRead(limitJ1);
+  }
+  stepper1.setCurrentPosition(0);
+  stepper1.moveTo(0.25 * stepsInRev);
+  while (stepper1.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
+    stepper1.run();
+  }
+  stepper1.setCurrentPosition(0);
+}
+
+void caliJ2(int accel){
+  int limitVal = analogRead(limitJ2);
+  int stepsInRev = (15 + (3/10))* 1600;
+  stepper2.setAcceleration(accel);
+  stepper2.setCurrentPosition(0);
+  stepper2.moveTo(stepsInRev);
+  while (limitVal == LOW){
+    stepper2.run();
+    limitVal = analogRead(limitJ2);
+  }
+  stepper2.setCurrentPosition(0);
+  stepper2.moveTo(0.25 * stepsInRev);
+  while (stepper2.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
+    stepper2.run();
+  }
+  stepper2.setCurrentPosition(0);
+}
+
+void caliJ3(int accel){
+  int limitVal = analogRead(limitJ3);
+  int stepsInRev = (26 + (103/121))* 1600;
+  stepper3.setAcceleration(accel);
+  stepper3.setCurrentPosition(0);
+  stepper3.moveTo(stepsInRev);
+  while (limitVal == LOW){
+    stepper3.run();
+    limitVal = analogRead(limitJ3);
+  }
+  stepper3.setCurrentPosition(0);
+  stepper3.moveTo(0.25 * stepsInRev);
+  while (stepper3.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
+    stepper3.run();
+  }
+  stepper3.setCurrentPosition(0);
+}
+
+void caliJ4(int accel){
+  int limitVal = analogRead(limitJ4);
+  int stepsInRev = (5 + (2/11))* 1600;
+  stepper4.setAcceleration(accel);
+  stepper4.setCurrentPosition(0);
+  stepper4.moveTo(stepsInRev);
+  while (limitVal == LOW){
+    stepper4.run();
+    limitVal = analogRead(limitJ4);
+  }
+  stepper4.setCurrentPosition(0);
+  stepper4.moveTo(0.25 * stepsInRev);
+  while (stepper4.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
+    stepper4.run();
+  }
+  stepper4.setCurrentPosition(0);
+}
+
+void caliJ5(int accel){
+  int limitVal = analogRead(limitJ5);
+  int stepsInRev = (13.73) * 1600;
+  stepper5.setAcceleration(accel);
+  stepper5.setCurrentPosition(0);
+  stepper5.moveTo(stepsInRev);
+  while (limitVal == LOW){
+    stepper5.run();
+    limitVal = analogRead(limitJ5);
+  }
+  stepper5.setCurrentPosition(0);
+  stepper5.moveTo(0.25 * stepsInRev);
+  while (stepper5.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
+    stepper5.run();
+  }
+  stepper5.setCurrentPosition(0);
+}
+
+void caliJ6(int accel){
+  int limitVal = analogRead(limitJ6);
+  int stepsInRev = 1600;
+  stepper6.setAcceleration(accel);
+  stepper6.setCurrentPosition(0);
+  stepper6.moveTo(stepsInRev);
+  while (limitVal == LOW){
+    stepper6.run();
+    limitVal = analogRead(limitJ6);
+  }
+  stepper6.setCurrentPosition(0);
+  stepper6.moveTo(0.25 * stepsInRev);
+  while (stepper6.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
+    stepper6.run();
+  }
+  stepper6.setCurrentPosition(0);
+}
