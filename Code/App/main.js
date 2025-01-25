@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { exec } = require('child_process');
 const path = require('path');
+const fs = require('fs');
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -38,9 +39,17 @@ ipcMain.on('identify', (event) => {
     }
     console.log(`stdout: ${stdout}`);
     event.reply('console-message', `${stdout}`);
-  });
-});
 
+    fs.readdir(path.join(__dirname, 'runs/detect/'), (err, files) => {
+      var num = files.length;
+      num = String(num);
+      if (num == 0){
+        num = "";
+      }
+      event.sender.send('update', path.join(__dirname, 'runs/detect/predict'+num+"/filename.jpg"));
+    });
+  });
+})
 ipcMain.on('sort', (event) => {
   exec('cmd.exe /c "conda activate tf && python ./scripts/sortYOLO.py"', (err, stdout, stderr) => {
     if (err) {
