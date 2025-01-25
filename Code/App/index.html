@@ -107,6 +107,11 @@
       document.getElementById('id').addEventListener('click', function() {
         addMessage('Identifying...');
         ipcRenderer.send('identify');
+        
+        ipcRenderer.once('update', (event, imagePath) => {
+          const timestamp = new Date().getTime(); 
+          imageElement.src = `${imagePath}?${timestamp}`; 
+        });
       });
 
       document.getElementById('sort').addEventListener('click', function() {
