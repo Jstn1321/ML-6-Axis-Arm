@@ -1,6 +1,7 @@
 from ultralytics import YOLO
 import os
 import json
+import sys
 
 # Load a model
 model_path = os.path.join(os.path.dirname(__file__), 'assets/MLModel/best.pt')
@@ -30,7 +31,7 @@ if len(boxids) == 1:
         boxname = "green box"
         conf[0] = int(conf[0] * 100)
         conf = list(map(str,conf))
-        print("I think this is a " + boxname + " with a confidence of " + conf[0]) + "%."
+        print("I think this is a " + boxname + " with a confidence of " + conf[0]+ "%.") 
         data = {
             "greenbox": greenbox,
             "greenCoord": greenCoord
@@ -39,7 +40,7 @@ if len(boxids) == 1:
         boxname = "blue box"
         conf[0] = int(conf[0] * 100)
         conf = list(map(str,conf))
-        print("I think this is a " + boxname + " with a confidence of " + conf[0]) + "%."
+        print("I think this is a " + boxname + " with a confidence of " + conf[0]+ "%.") 
         data = {
             "bluebox": bluebox,
             "blueCoord": blueCoord,
