@@ -97,6 +97,7 @@ void setup() {
 
 void loop() {
   
+  /*
   if (firstRun == true){
     caliJ1(1000); //IDK HOW FAST
     caliJ2(1000); //IDK HOW FAST
@@ -106,7 +107,7 @@ void loop() {
     caliJ6(1000); //IDK HOW FAST
     firstRun = false;
   }
-
+*/
   if (manual){
   if (Serial.available() > 0) {
     receivedData = Serial.readStringUntil('\n'); 
@@ -114,6 +115,7 @@ void loop() {
       manual = false;
     }
   }
+  
   rgbLed(0,255,0);
   changeStatus("Status: Idle");
 
@@ -211,9 +213,9 @@ void loop() {
 
   while (joy2y > 700){
     digitalWrite(J4step,HIGH); 
-    delayMicroseconds(600);     
+    delayMicroseconds(200);     
     digitalWrite(J4step,LOW); 
-    delayMicroseconds(600); 
+    delayMicroseconds(200); 
     joy2y = analogRead(A3);
   }
  }
@@ -224,9 +226,9 @@ void loop() {
 
     while (joy2y < 200){
       digitalWrite(J4step,HIGH); 
-      delayMicroseconds(500);     
+      delayMicroseconds(200);     
       digitalWrite(J4step,LOW); 
-      delayMicroseconds(500); 
+      delayMicroseconds(200); 
       joy2y = analogRead(A3);
     }
   }
@@ -238,9 +240,9 @@ void loop() {
 
   while (joy3x > 700){
     digitalWrite(J5step,HIGH); 
-    delayMicroseconds(100);     
+    delayMicroseconds(50);     
     digitalWrite(J5step,LOW); 
-    delayMicroseconds(100); 
+    delayMicroseconds(50); 
     joy3x = analogRead(A4);
   }
  }
@@ -251,9 +253,9 @@ void loop() {
 
     while (joy3x < 200){
       digitalWrite(J5step,HIGH); 
-      delayMicroseconds(100);     
+      delayMicroseconds(50);     
       digitalWrite(J5step,LOW); 
-      delayMicroseconds(100); 
+      delayMicroseconds(50); 
       joy3x = analogRead(A4);
     }
   }
@@ -287,13 +289,14 @@ void loop() {
   }
   
   if (manual == false) {
+    rgbLed(0,0,255);
+    changeMode("Mode: Auto");
   if (Serial.available() > 0) {
     receivedData = Serial.readStringUntil('\n'); 
     if (receivedData.length() == 1 && receivedData.equals("m")){
       manual = true;
     }
-    rgbLed(0,0,255);
-    changeMode("Sdrg");
+    
     int startingPoint = 0;
     int commaPoint = 0;
     float itemInData = 0.0; 
