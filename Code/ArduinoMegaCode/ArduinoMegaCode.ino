@@ -12,7 +12,7 @@
 #define J2dir 44
 #define J3step 45
 #define J3dir 46
-#define J4step 47
+#define J4step 39
 #define J4dir 48
 #define J5step 49
 #define J5dir 50
@@ -26,6 +26,14 @@
 #define limitJ4 31
 #define limitJ5 32
 #define limitJ6 33
+
+ezButton limJ1(limitJ1);
+ezButton limJ2(limitJ2);
+ezButton limJ3(limitJ3);
+ezButton limJ4(limitJ4);
+ezButton limJ5(limitJ5);
+ezButton limJ6(limitJ6);
+
 
 byte booger;
 int16_t x,y;
@@ -50,6 +58,8 @@ int joy5y;
 int joy6x;
 int joy6y;
 
+int temp;
+
 int firstRun = true;
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
@@ -57,7 +67,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
 AccelStepper stepper6(1, 51, 52); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper5(1, 49, 50); // (Type of driver: with 2 pins, STEP, DIR)
-AccelStepper stepper4(1, 47, 48); // (Type of driver: with 2 pins, STEP, DIR)
+AccelStepper stepper4(1, 39, 48); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper3(1, 45, 46); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper2(1, 43, 44); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper1(1, 41, 42); // (Type of driver: with 2 pins, STEP, DIR)
@@ -67,6 +77,14 @@ void setup() {
   pinMode(14, OUTPUT);
   pinMode(25, OUTPUT);
   pinMode(26, OUTPUT);
+  pinMode(limitJ1, INPUT);
+  pinMode(limitJ2, INPUT);
+  pinMode(limitJ3, INPUT);
+  pinMode(limitJ4, INPUT);
+  pinMode(limitJ5, INPUT_PULLUP);
+  pinMode(limitJ6, INPUT);
+  pinMode(7, OUTPUT);
+  digitalWrite(7, HIGH);
   // put your setup code here, to run once:
   Serial.begin(115200);
   while (!Serial); 
@@ -93,21 +111,25 @@ void setup() {
   display.setCursor(0, 50);
   display.println("Status: Idle");
   display.display(); 
+
+  stepper5.setMaxSpeed(5000);
+  stepper5.setAcceleration(5000);
+  stepper5.setCurrentPosition(0);
 }
 
 void loop() {
-  
-  /*
-  if (firstRun == true){
-    caliJ1(1000); //IDK HOW FAST
-    caliJ2(1000); //IDK HOW FAST
-    caliJ3(1000); //IDK HOW FAST
-    caliJ4(1000); //IDK HOW FAST
-    caliJ5(1000); //IDK HOW FAST
-    caliJ6(1000); //IDK HOW FAST
+
+  if (firstRun){
+    //caliJ1(1000); //IDK HOW FAST
+    //caliJ2(1000); //IDK HOW FAST
+    //caliJ3(1000); //IDK HOW FAST
+    //caliJ4(1000); //IDK HOW FAST
+    caliJ5(); //IDK HOW FAST
+    //caliJ6(1000); //IDK HOW FAST
     firstRun = false;
+    rgbLed(255,0,0);
+    delay(1000);
   }
-*/
   if (manual){
   if (Serial.available() > 0) {
     receivedData = Serial.readStringUntil('\n'); 
@@ -125,7 +147,7 @@ void loop() {
   joy2y = analogRead(A3);
   joy3x = analogRead(A4);
   joy3y = analogRead(A5);
-
+  /*
   if (joy1x > 700){
     rgbLed(255,0,0);
     changeStatus("Status: Moving");
@@ -133,9 +155,9 @@ void loop() {
     
     while (joy1x > 700){
       digitalWrite(J1step,HIGH); 
-      __asm__("nop\n\t");
+      //__asm__("nop\n\t");
       digitalWrite(J1step,LOW); 
-      __asm__("nop\n\t");
+      //__asm__("nop\n\t");
       joy1x = analogRead(A0);
     }
   } 
@@ -146,9 +168,9 @@ void loop() {
   
     while (joy1x < 200){
       digitalWrite(J1step,HIGH); 
-      __asm__("nop\n\t");    
+     // __asm__("nop\n\t");    
       digitalWrite(J1step,LOW); 
-      __asm__("nop\n\t");
+      //__asm__("nop\n\t");
       joy1x = analogRead(A0);
     }
   }
@@ -185,9 +207,9 @@ void loop() {
 
     while (joy2x > 700){
       digitalWrite(J3step,HIGH); 
-      delayMicroseconds(100);  
+      delayMicroseconds(200);  
       digitalWrite(J3step,LOW); 
-      delayMicroseconds(100); 
+      delayMicroseconds(200); 
       joy2x = analogRead(A2);
     }
   }
@@ -198,9 +220,9 @@ void loop() {
 
     while (joy2x < 200){
       digitalWrite(J3step,HIGH); 
-      delayMicroseconds(100);     
+      delayMicroseconds(200);     
       digitalWrite(J3step,LOW); 
-      delayMicroseconds(100); 
+      delayMicroseconds(200); 
       joy2x = analogRead(A2);
   }
 }
@@ -286,6 +308,7 @@ void loop() {
       joy3y = analogRead(A5);
     }
     }
+    */
   }
   
   if (manual == false) {
@@ -437,21 +460,21 @@ void caliJ4(int accel){
   stepper4.setCurrentPosition(0);
 }
 
-void caliJ5(int accel){
-  int limitVal = analogRead(limitJ5);
-  int stepsInRev = (13.73) * 1600;
-  stepper5.setAcceleration(accel);
+void caliJ5(){
+  while (true){
+      limJ5.loop();
+      digitalWrite(J5step,HIGH);     
+      Serial.println("running");
+      int state = limJ5.getState();
+      digitalWrite(J5step,LOW); 
+      if (state == LOW){
+        Serial.println("broke");
+        break;
+      }
+    }
   stepper5.setCurrentPosition(0);
-  stepper5.moveTo(stepsInRev);
-  while (limitVal == LOW){
-    stepper5.run();
-    limitVal = analogRead(limitJ5);
-  }
-  stepper5.setCurrentPosition(0);
-  stepper5.moveTo(0.25 * stepsInRev);
-  while (stepper5.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
-    stepper5.run();
-  }
+  stepper5.moveTo(14*1600*0.25);
+  stepper5.runToPosition();
   stepper5.setCurrentPosition(0);
 }
 
