@@ -18,8 +18,10 @@
 #define J5dir 50
 #define J6step 51
 #define J6dir 52
+
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
 #define limitJ1 28
 #define limitJ2 29
 #define limitJ3 30
@@ -112,20 +114,37 @@ void setup() {
   display.println("Status: Idle");
   display.display(); 
 
+
+  stepper1.setMaxSpeed(5000);
+  stepper1.setAcceleration(5000);
+  stepper2.setMaxSpeed(5000);
+  stepper2.setAcceleration(5000);
+  stepper3.setMaxSpeed(5000);
+  stepper3.setAcceleration(5000);
+  stepper4.setMaxSpeed(5000);
+  stepper4.setAcceleration(5000);
   stepper5.setMaxSpeed(5000);
   stepper5.setAcceleration(5000);
+  stepper6.setMaxSpeed(5000);
+  stepper6.setAcceleration(5000);
+
+  stepper1.setCurrentPosition(0);
+  stepper2.setCurrentPosition(0);
+  stepper3.setCurrentPosition(0);
+  stepper4.setCurrentPosition(0);
   stepper5.setCurrentPosition(0);
+  stepper6.setCurrentPosition(0);
 }
 
 void loop() {
 
   if (firstRun){
-    //caliJ1(1000); //IDK HOW FAST
-    //caliJ2(1000); //IDK HOW FAST
-    //caliJ3(1000); //IDK HOW FAST
-    //caliJ4(1000); //IDK HOW FAST
+    //caliJ1(5000, 5000); //IDK HOW FAST
+    //caliJ2(5000, 5000); //IDK HOW FAST
+    //caliJ3(5000, 5000); //IDK HOW FAST
+    //caliJ4(5000, 5000); //IDK HOW FAST
     caliJ5(); //IDK HOW FAST
-    //caliJ6(1000); //IDK HOW FAST
+    //caliJ6(5000, 5000); //IDK HOW FAST
     firstRun = false;
     rgbLed(255,0,0);
     delay(1000);
@@ -147,7 +166,7 @@ void loop() {
   joy2y = analogRead(A3);
   joy3x = analogRead(A4);
   joy3y = analogRead(A5);
-  /*
+
   if (joy1x > 700){
     rgbLed(255,0,0);
     changeStatus("Status: Moving");
@@ -308,7 +327,6 @@ void loop() {
       joy3y = analogRead(A5);
     }
     }
-    */
   }
   
   if (manual == false) {
@@ -388,75 +406,75 @@ void changeMode (String message){
   display.display(); 
 }
 
-void caliJ1(int accel){
-  int limitVal = analogRead(limitJ1);
-  int stepsInRev = (50 + (4397/4913))* 1600;
+void caliJ1(int accel, int maxSpeed){
   stepper1.setAcceleration(accel);
+  stepper1.setMaxSpeed(maxSpeed);
+  while (true){
+      limJ1.loop();
+      digitalWrite(J1step,HIGH);     
+      int state = limJ1.getState();
+      digitalWrite(J1step,LOW); 
+      if (state == LOW){
+        break;
+      }
+    }
   stepper1.setCurrentPosition(0);
-  stepper1.moveTo(stepsInRev);
-  while (limitVal == LOW){
-    stepper1.run();
-    limitVal = analogRead(limitJ1);
-  }
-  stepper1.setCurrentPosition(0);
-  stepper1.moveTo(0.25 * stepsInRev);
-  while (stepper1.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
-    stepper1.run();
-  }
+  stepper1.moveTo(1600*0.25*51);
+  stepper1.runToPosition();
   stepper1.setCurrentPosition(0);
 }
 
-void caliJ2(int accel){
-  int limitVal = analogRead(limitJ2);
-  int stepsInRev = (15 + (3/10))* 1600;
+void caliJ2(int accel, int maxSpeed){
   stepper2.setAcceleration(accel);
+  stepper2.setMaxSpeed(maxSpeed);
+  while (true){
+      limJ2.loop();
+      digitalWrite(J2step,HIGH);     
+      int state = limJ2.getState();
+      digitalWrite(J2step,LOW); 
+      if (state == LOW){
+        break;
+      }
+    }
   stepper2.setCurrentPosition(0);
-  stepper2.moveTo(stepsInRev);
-  while (limitVal == LOW){
-    stepper2.run();
-    limitVal = analogRead(limitJ2);
-  }
-  stepper2.setCurrentPosition(0);
-  stepper2.moveTo(0.25 * stepsInRev);
-  while (stepper2.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
-    stepper2.run();
-  }
+  stepper2.moveTo(1600*0.25*15);
+  stepper2.runToPosition();
   stepper2.setCurrentPosition(0);
 }
 
-void caliJ3(int accel){
-  int limitVal = analogRead(limitJ3);
-  int stepsInRev = (26 + (103/121))* 1600;
+void caliJ3(int accel, int maxSpeed){
   stepper3.setAcceleration(accel);
+  stepper3.setMaxSpeed(maxSpeed);
+  while (true){
+      limJ3.loop();
+      digitalWrite(J3step,HIGH);     
+      int state = limJ3.getState();
+      digitalWrite(J3step,LOW); 
+      if (state == LOW){
+        break;
+      }
+    }
   stepper3.setCurrentPosition(0);
-  stepper3.moveTo(stepsInRev);
-  while (limitVal == LOW){
-    stepper3.run();
-    limitVal = analogRead(limitJ3);
-  }
-  stepper3.setCurrentPosition(0);
-  stepper3.moveTo(0.25 * stepsInRev);
-  while (stepper3.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
-    stepper3.run();
-  }
+  stepper3.moveTo(1600*0.25*27);
+  stepper3.runToPosition();
   stepper3.setCurrentPosition(0);
 }
 
-void caliJ4(int accel){
-  int limitVal = analogRead(limitJ4);
-  int stepsInRev = (5 + (2/11))* 1600;
+void caliJ4(int accel, int maxSpeed){
   stepper4.setAcceleration(accel);
+  stepper4.setMaxSpeed(maxSpeed);
+  while (true){
+      limJ4.loop();
+      digitalWrite(J4step,HIGH);     
+      int state = limJ4.getState();
+      digitalWrite(J4step,LOW); 
+      if (state == LOW){
+        break;
+      }
+    }
   stepper4.setCurrentPosition(0);
-  stepper4.moveTo(stepsInRev);
-  while (limitVal == LOW){
-    stepper4.run();
-    limitVal = analogRead(limitJ4);
-  }
-  stepper4.setCurrentPosition(0);
-  stepper4.moveTo(0.25 * stepsInRev);
-  while (stepper4.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
-    stepper4.run();
-  }
+  stepper4.moveTo(1600*0.25*5);
+  stepper4.runToPosition();
   stepper4.setCurrentPosition(0);
 }
 
@@ -464,34 +482,36 @@ void caliJ5(){
   while (true){
       limJ5.loop();
       digitalWrite(J5step,HIGH);     
+      delayMicroseconds(50);
       Serial.println("running");
       int state = limJ5.getState();
       digitalWrite(J5step,LOW); 
+      delayMicroseconds(50);
       if (state == LOW){
         Serial.println("broke");
         break;
       }
     }
   stepper5.setCurrentPosition(0);
-  stepper5.moveTo(14*1600*0.25);
+  stepper5.moveTo(14*1600);
   stepper5.runToPosition();
   stepper5.setCurrentPosition(0);
 }
 
-void caliJ6(int accel){
-  int limitVal = analogRead(limitJ6);
-  int stepsInRev = 1600;
+void caliJ6(int accel, int maxSpeed){
   stepper6.setAcceleration(accel);
+  stepper6.setMaxSpeed(maxSpeed);
+  while (true){
+      limJ6.loop();
+      digitalWrite(J6step,HIGH);     
+      int state = limJ6.getState();
+      digitalWrite(J6step,LOW); 
+      if (state == LOW){
+        break;
+      }
+    }
   stepper6.setCurrentPosition(0);
-  stepper6.moveTo(stepsInRev);
-  while (limitVal == LOW){
-    stepper6.run();
-    limitVal = analogRead(limitJ6);
-  }
-  stepper6.setCurrentPosition(0);
-  stepper6.moveTo(0.25 * stepsInRev);
-  while (stepper6.currentPosition() != (0.25 * stepsInRev)){ // !!!!CHANGE THIS, IT MAY NOT BE 90 DEGREES!!!
-    stepper6.run();
-  }
+  stepper6.moveTo(1600*0.25);
+  stepper6.runToPosition();
   stepper6.setCurrentPosition(0);
 }
