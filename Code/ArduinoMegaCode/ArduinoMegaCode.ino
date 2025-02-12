@@ -79,19 +79,15 @@ void setup() {
   pinMode(14, OUTPUT);
   pinMode(25, OUTPUT);
   pinMode(26, OUTPUT);
-  pinMode(limitJ1, INPUT);
-  pinMode(limitJ2, INPUT);
-  pinMode(limitJ3, INPUT);
-  pinMode(limitJ4, INPUT);
+  pinMode(limitJ1, INPUT_PULLUP);
+  pinMode(limitJ2, INPUT_PULLUP);
+  pinMode(limitJ3, INPUT_PULLUP);
+  pinMode(limitJ4, INPUT_PULLUP);
   pinMode(limitJ5, INPUT_PULLUP);
-  pinMode(limitJ6, INPUT);
-  pinMode(7, OUTPUT);
-  digitalWrite(7, HIGH);
+  pinMode(limitJ6, INPUT_PULLUP);
   // put your setup code here, to run once:
   Serial.begin(115200);
   while (!Serial); 
-  stepper1.setMaxSpeed(10000);
-  stepper2.setMaxSpeed(10000);
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
     if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
@@ -116,17 +112,17 @@ void setup() {
 
 
   stepper1.setMaxSpeed(5000);
-  stepper1.setAcceleration(5000);
-  stepper2.setMaxSpeed(5000);
-  stepper2.setAcceleration(5000);
-  stepper3.setMaxSpeed(5000);
-  stepper3.setAcceleration(5000);
+  stepper1.setAcceleration(1000);
+  stepper2.setMaxSpeed(1500);
+  stepper2.setAcceleration(700);
+  stepper3.setMaxSpeed(2000);
+  stepper3.setAcceleration(500);
   stepper4.setMaxSpeed(5000);
-  stepper4.setAcceleration(5000);
-  stepper5.setMaxSpeed(5000);
-  stepper5.setAcceleration(5000);
-  stepper6.setMaxSpeed(5000);
-  stepper6.setAcceleration(5000);
+  stepper4.setAcceleration(1000);
+  stepper5.setMaxSpeed(10000);
+  stepper5.setAcceleration(1000);
+  stepper6.setMaxSpeed(1000);
+  stepper6.setAcceleration(500);
 
   stepper1.setCurrentPosition(0);
   stepper2.setCurrentPosition(0);
@@ -134,17 +130,24 @@ void setup() {
   stepper4.setCurrentPosition(0);
   stepper5.setCurrentPosition(0);
   stepper6.setCurrentPosition(0);
+
+  limJ1.setDebounceTime(50); 
+  limJ2.setDebounceTime(50); 
+  limJ3.setDebounceTime(50); 
+  limJ4.setDebounceTime(50); 
+  limJ5.setDebounceTime(50); 
+  limJ6.setDebounceTime(50); 
 }
 
 void loop() {
 
   if (firstRun){
     //caliJ1(5000, 5000); //IDK HOW FAST
-    //caliJ2(5000, 5000); //IDK HOW FAST
-    //caliJ3(5000, 5000); //IDK HOW FAST
-    //caliJ4(5000, 5000); //IDK HOW FAST
-    caliJ5(); //IDK HOW FAST
-    //caliJ6(5000, 5000); //IDK HOW FAST
+    caliJ2(); 
+    //caliJ3(); 
+    //caliJ4(); 
+    //caliJ5(); 
+    //caliJ6(); 
     firstRun = false;
     rgbLed(255,0,0);
     delay(1000);
@@ -406,9 +409,7 @@ void changeMode (String message){
   display.display(); 
 }
 
-void caliJ1(int accel, int maxSpeed){
-  stepper1.setAcceleration(accel);
-  stepper1.setMaxSpeed(maxSpeed);
+void caliJ1(){
   while (true){
       limJ1.loop();
       digitalWrite(J1step,HIGH);     
@@ -424,94 +425,88 @@ void caliJ1(int accel, int maxSpeed){
   stepper1.setCurrentPosition(0);
 }
 
-void caliJ2(int accel, int maxSpeed){
-  stepper2.setAcceleration(accel);
-  stepper2.setMaxSpeed(maxSpeed);
+void caliJ2(){
+  int state = limJ2.getState();
+  stepper2.moveTo(-60000);
+  if (state == HIGH){
   while (true){
       limJ2.loop();
-      digitalWrite(J2step,HIGH);     
-      int state = limJ2.getState();
-      digitalWrite(J2step,LOW); 
+      stepper2.run();
+      state = limJ2.getState();
       if (state == LOW){
         break;
       }
     }
+  }
   stepper2.setCurrentPosition(0);
-  stepper2.moveTo(1600*0.25*15);
+  stepper2.moveTo(1600*0.05*15);
   stepper2.runToPosition();
   stepper2.setCurrentPosition(0);
 }
 
-void caliJ3(int accel, int maxSpeed){
-  stepper3.setAcceleration(accel);
-  stepper3.setMaxSpeed(maxSpeed);
+void caliJ3(){
+  stepper3.moveTo(-60000);
   while (true){
       limJ3.loop();
-      digitalWrite(J3step,HIGH);     
+      stepper3.run();
       int state = limJ3.getState();
-      digitalWrite(J3step,LOW); 
+      Serial.println("running");
       if (state == LOW){
+        Serial.println("brewka");
         break;
       }
     }
   stepper3.setCurrentPosition(0);
-  stepper3.moveTo(1600*0.25*27);
+  stepper3.moveTo(1600*0.1*27);
   stepper3.runToPosition();
   stepper3.setCurrentPosition(0);
 }
 
-void caliJ4(int accel, int maxSpeed){
-  stepper4.setAcceleration(accel);
-  stepper4.setMaxSpeed(maxSpeed);
+void caliJ4(){
+  stepper4.moveTo(60000);
   while (true){
-      limJ4.loop();
-      digitalWrite(J4step,HIGH);     
+      limJ4.loop();  
+      stepper4.run();
       int state = limJ4.getState();
-      digitalWrite(J4step,LOW); 
       if (state == LOW){
         break;
       }
     }
   stepper4.setCurrentPosition(0);
-  stepper4.moveTo(1600*0.25*5);
+  stepper4.moveTo(-1600*0.7*5);
   stepper4.runToPosition();
   stepper4.setCurrentPosition(0);
 }
 
 void caliJ5(){
+  stepper5.moveTo(-60000);
   while (true){
       limJ5.loop();
-      digitalWrite(J5step,HIGH);     
-      delayMicroseconds(50);
-      Serial.println("running");
+      stepper5.run();
       int state = limJ5.getState();
-      digitalWrite(J5step,LOW); 
-      delayMicroseconds(50);
       if (state == LOW){
-        Serial.println("broke");
         break;
       }
     }
   stepper5.setCurrentPosition(0);
-  stepper5.moveTo(14*1600);
+  stepper5.moveTo(14*1600*0.7);
   stepper5.runToPosition();
   stepper5.setCurrentPosition(0);
 }
 
-void caliJ6(int accel, int maxSpeed){
-  stepper6.setAcceleration(accel);
-  stepper6.setMaxSpeed(maxSpeed);
+void caliJ6(){
+  digitalWrite(J6dir, HIGH);
+  stepper6.moveTo(60000);
   while (true){
-      limJ6.loop();
-      digitalWrite(J6step,HIGH);     
+      limJ6.loop(); 
+      stepper6.run();
       int state = limJ6.getState();
-      digitalWrite(J6step,LOW); 
       if (state == LOW){
         break;
       }
     }
   stepper6.setCurrentPosition(0);
-  stepper6.moveTo(1600*0.25);
+  stepper6.moveTo(-730);
   stepper6.runToPosition();
   stepper6.setCurrentPosition(0);
 }
