@@ -17,7 +17,7 @@ const createWindow = () => {
 };
 
 ipcMain.on('takePic', (event) => {
-  exec('cmd.exe /c "conda activate tf && python ./scripts/takePic.py"', (err, stdout, stderr) => {
+  exec('cmd.exe /c "python ./scripts/takePic.py"', (err, stdout, stderr) => {
     if (err) {
       console.error(`exec error: ${err}`);
       event.reply('console-message', `Error: ${stderr}`);
@@ -31,7 +31,7 @@ ipcMain.on('takePic', (event) => {
 });
 
 ipcMain.on('identify', (event) => {
-  exec('cmd.exe /c "conda activate tf && python ./scripts/idYOLO.py"', (err, stdout, stderr) => {
+  exec('cmd.exe /c "python ./scripts/idYOLO.py"', (err, stdout, stderr) => {
     if (err) {
       console.error(`exec error: ${err}`);
       event.reply('console-message', `Error: ${stderr}`);
@@ -51,7 +51,7 @@ ipcMain.on('identify', (event) => {
   });
 })
 ipcMain.on('sort', (event) => {
-  exec('cmd.exe /c "conda activate tf && python ./scripts/sortYOLO.py"', (err, stdout, stderr) => {
+  exec('cmd.exe /c "python ./scripts/sortYOLO.py"', (err, stdout, stderr) => {
     if (err) {
       console.error(`exec error: ${err}`);
       event.reply('console-message', `Error: ${stderr}`);
@@ -63,7 +63,7 @@ ipcMain.on('sort', (event) => {
 });
 
 ipcMain.on('auto', (event) => {
-  exec('cmd.exe /c "conda activate tf && python ./scripts/setAuto.py"', (err, stdout, stderr) => {
+  exec('cmd.exe /c "python ./scripts/setAuto.py"', (err, stdout, stderr) => {
     if (err) {
       console.error(`exec error: ${err}`);
       event.reply('console-message', `Error: ${stderr}`);
@@ -75,7 +75,7 @@ ipcMain.on('auto', (event) => {
 });
 
 ipcMain.on('manual', (event) => {
-  exec('cmd.exe /c "conda activate tf && python ./scripts/setManual.py"', (err, stdout, stderr) => {
+  exec('cmd.exe /c "python ./scripts/setManual.py"', (err, stdout, stderr) => {
     if (err) {
       console.error(`exec error: ${err}`);
       event.reply('console-message', `Error: ${stderr}`);
@@ -87,7 +87,7 @@ ipcMain.on('manual', (event) => {
 });
 
 ipcMain.on('picsort', (event) => {
-  exec('cmd.exe /c "conda activate tf && python ./scripts/picandsort.py"', (err, stdout, stderr) => {
+  exec('cmd.exe /c "python ./scripts/picandsort.py"', (err, stdout, stderr) => {
     if (err) {
       console.error(`exec error: ${err}`);
       event.reply('console-message', `Error: ${stderr}`);
