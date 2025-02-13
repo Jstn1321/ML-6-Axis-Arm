@@ -113,16 +113,16 @@ void setup() {
 
   stepper1.setMaxSpeed(5000);
   stepper1.setAcceleration(1000);
-  stepper2.setMaxSpeed(1500);
+  stepper2.setMaxSpeed(1000);
   stepper2.setAcceleration(700);
-  stepper3.setMaxSpeed(2000);
-  stepper3.setAcceleration(500);
-  stepper4.setMaxSpeed(5000);
+  stepper3.setMaxSpeed(8000);
+  stepper3.setAcceleration(250);
+  stepper4.setMaxSpeed(3000);
   stepper4.setAcceleration(1000);
   stepper5.setMaxSpeed(10000);
   stepper5.setAcceleration(1000);
-  stepper6.setMaxSpeed(1000);
-  stepper6.setAcceleration(500);
+  stepper6.setMaxSpeed(500);
+  stepper6.setAcceleration(100);
 
   stepper1.setCurrentPosition(0);
   stepper2.setCurrentPosition(0);
@@ -144,10 +144,10 @@ void loop() {
   if (firstRun){
     //caliJ1(5000, 5000); //IDK HOW FAST
     caliJ2(); 
-    //caliJ3(); 
-    //caliJ4(); 
-    //caliJ5(); 
-    //caliJ6(); 
+    caliJ3(); 
+    caliJ4(); 
+    caliJ5(); 
+    caliJ6(); 
     firstRun = false;
     rgbLed(255,0,0);
     delay(1000);
@@ -450,14 +450,12 @@ void caliJ3(){
       limJ3.loop();
       stepper3.run();
       int state = limJ3.getState();
-      Serial.println("running");
       if (state == LOW){
-        Serial.println("brewka");
         break;
       }
     }
   stepper3.setCurrentPosition(0);
-  stepper3.moveTo(1600*0.1*27);
+  stepper3.moveTo(1600*0.3*27);
   stepper3.runToPosition();
   stepper3.setCurrentPosition(0);
 }
@@ -489,7 +487,7 @@ void caliJ5(){
       }
     }
   stepper5.setCurrentPosition(0);
-  stepper5.moveTo(14*1600*0.7);
+  stepper5.moveTo(14*1600);
   stepper5.runToPosition();
   stepper5.setCurrentPosition(0);
 }
