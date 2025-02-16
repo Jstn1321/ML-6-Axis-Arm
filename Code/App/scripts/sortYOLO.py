@@ -3,6 +3,7 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import sendInvKine
+import math
 
 json_path = os.path.join(os.path.dirname(__file__), 'assets/boxCoords.json')
 with open(json_path, "r") as file:
@@ -29,9 +30,33 @@ if data.get("greenbox"):
 
 print(blueCoord)
 print(greenCoord)
+#1cm is roughly 13-14px for 300x300 image and with the stand
+#sendInvKine.sendInvKineToArd([0.4,0.0,0.2])
+#z,x,y
+print(str(bluex) + " , " + str(bluey)+ " , " + str(greenx)+ " , " + str(greeny))
 
-sendInvKine.sendInvKineToArd([0.4,0.0,0.2])
-"""
+zoffset = 0.25
+
+if (data.get("greenbox")):
+    globalgx = 150 - greenx
+    globalgx = (globalgx / 14) * math.pow(10, -2)
+    globalgy = 300 - greeny
+    globalgy = (globalgy / 14) * math.pow(10, -2)
+    globalgy = globalgy + zoffset
+    sendInvKine.sendInvKineToArd([globalgy,globalgx,0.2])
+    print(str(globalgx) + " , " + str(globalgy))
+    
+    
+
+if (data.get("bluebox")):
+    globalbx = 150 - bluex
+    globalbx = (globalbx / 14) * math.pow(10, -2)
+    globalby = 300 - bluey + zoffset
+    globalby = (globalby / 14) * math.pow(10, -2)
+    print(str(globalbx) + " , " + str(globalby))
+    sendInvKine.sendInvKineToArd([globalby,globalbx,0.2])
+
+
 plt.title("Box Image")
 plt.xlabel("X pixel scaling")
 plt.ylabel("Y pixels scaling")
@@ -43,4 +68,3 @@ if data.get("greenbox"):
 image = mpimg.imread(os.path.join(os.path.dirname(__file__), "assets/takenPic/filename.jpg"))
 plt.imshow(image)
 plt.show()
-"""
