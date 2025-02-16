@@ -2,9 +2,10 @@ import cv2
 import sys
 import os
 
+
 def capture_image():
     # Open camera
-    camera = cv2.VideoCapture(0)
+    camera = cv2.VideoCapture(1)
     if not camera.isOpened():
         return "Unable to access the camera."
     
