@@ -16,19 +16,27 @@ target_orientation = [0, 0, -1]
 orientation_axis = "Z"
 def ik(xyz):
     invKine = JNV1_chain.inverse_kinematics(target_position=xyz, target_orientation=target_orientation,orientation_mode=orientation_axis).tolist() 
+    
+    print(invKine)
+
     for i in range(0,len(invKine)):
         invKine[i] = math.degrees(invKine[i])
-        invKine[0] = (invKine[0]/360) * (51 * 1600)
-        invKine[1] = (invKine[1]/360) * (15* 1600)
-        invKine[2] = (invKine[2]/360) * 27* 1600
-        invKine[3] = (invKine[3]/360) * (5 * 1600)
-        invKine[4] = (invKine[4]/360) * 14 * 1600
-        invKine[5] = (invKine[5]/360) * (1600)
+    
     print(invKine)
+    
+    invKine[1] = (invKine[1]/360) * (51 * 1600 * 3)
+    invKine[2] = (invKine[2]/360) * (15* 1600)
+    invKine[4] = (invKine[4]/360) * 27* 1600 * 3
+    invKine[5] = (invKine[5]/360) * (5 * 1600 * 3)
+    invKine[6] = (invKine[6]/360) * 14 * 1600 * 3
+    invKine[7] = (invKine[7]/360) * (1600)
+
+    for i in range(0,len(invKine)):
+        invKine[i] = int(invKine[i])
+
+    print(invKine)
+
     return invKine
-"""
-JNV1_chain.plot(JNV1_chain.inverse_kinematics(target_position=[0.2,0.4,0.3], target_orientation=target_orientation,orientation_mode=orientation_axis), ax)
-matplotlib.pyplot.show()
-print(JNV1_chain.inverse_kinematics(target_position=[0.2,0.4,0.3], target_orientation=target_orientation,orientation_mode=orientation_axis))
-print(ik([0.5,0.3,0.6]))
-"""
+
+#ik([0.4,0.0,0.2])
+#Z,X,Y
