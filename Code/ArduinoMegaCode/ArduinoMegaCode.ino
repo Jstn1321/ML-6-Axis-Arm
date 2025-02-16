@@ -29,6 +29,13 @@
 #define limitJ5 32
 #define limitJ6 33
 
+int J1pos;
+int J2pos;
+int J3pos;
+int J4pos;
+int J5pos;
+int J6pos;
+
 ezButton limJ1(limitJ1);
 ezButton limJ2(limitJ2);
 ezButton limJ3(limitJ3);
@@ -36,14 +43,11 @@ ezButton limJ4(limitJ4);
 ezButton limJ5(limitJ5);
 ezButton limJ6(limitJ6);
 
-
 byte booger;
 int16_t x,y;
 uint16_t w,h;
 
 bool manual = true;
-
-String receivedData;
 
 int steps[6] = {0,0,0,0,0,0};
 
@@ -62,7 +66,7 @@ int joy6y;
 
 int temp;
 
-int firstRun = true;
+bool firstRun = true;
 
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
@@ -143,22 +147,25 @@ void loop() {
 
   if (firstRun){
     //caliJ1(5000, 5000); //IDK HOW FAST
-    caliJ2(); 
-    caliJ3(); 
-    caliJ4(); 
+    //caliJ2(); 
+    //caliJ3(); 
+    //caliJ4(); 
     caliJ5(); 
-    caliJ6(); 
+    //caliJ6(); 
     firstRun = false;
     rgbLed(255,0,0);
-    delay(1000);
   }
-  if (manual){
   if (Serial.available() > 0) {
-    receivedData = Serial.readStringUntil('\n'); 
-    if (receivedData.equals("a")){
+    String receivedData = Serial.readStringUntil('\n'); 
+    if (receivedData.length() <= 1 && receivedData.equals("a")){
       manual = false;
     }
+    if (receivedData.length() <= 1 && receivedData.equals("m")){
+      manual = true;
+    }
   }
+
+  if (manual){
   
   rgbLed(0,255,0);
   changeStatus("Status: Idle");
@@ -332,29 +339,25 @@ void loop() {
     }
   }
   
-  if (manual == false) {
-    rgbLed(0,0,255);
-    changeMode("Mode: Auto");
+if (manual == false) {
+  rgbLed(0,0,255);
+  changeMode("Mode: Auto");
   if (Serial.available() > 0) {
-    receivedData = Serial.readStringUntil('\n'); 
-    if (receivedData.length() == 1 && receivedData.equals("m")){
-      manual = true;
-    }
-    
+    String receivedData = Serial.readStringUntil('\n'); 
+
     int startingPoint = 0;
     int commaPoint = 0;
-    float itemInData = 0.0; 
-    float jointAngles[8];  
+    int itemInData = 0.0; 
+    int jointAngles[8] = {0};  
     int jointAnglesIndex = 0;
-
-    
+  
   if (receivedData.length() > 1){
     for (int i = 0; i < receivedData.length(); i++) {
       if (receivedData[i] == ',') {
         commaPoint = i;
         String temp = receivedData.substring(startingPoint, commaPoint);
         temp.trim();
-        itemInData = temp.toFloat(); 
+        itemInData = temp.toInt(); 
         if (jointAnglesIndex < 8) {  
           jointAngles[jointAnglesIndex] = itemInData;
           jointAnglesIndex++;
@@ -366,17 +369,27 @@ void loop() {
     if (startingPoint < receivedData.length()) {
       String temp = receivedData.substring(startingPoint);
       temp.trim();
-      itemInData = temp.toFloat();
+      itemInData = temp.toInt();
       if (jointAnglesIndex < 8) { 
         jointAngles[jointAnglesIndex] = itemInData;
         jointAnglesIndex++;
       }
     }
+    /*
+    stepper2.moveTo(J2pos - jointAngles[2]);
+    stepper2.runToPosition();
+    J2pos = jointAngles[2];
+    */
+    stepper5.moveTo(J5pos - jointAngles[6]);
+    stepper5.runToPosition();
+    J5pos = jointAngles[6];
+    }
+    
     }
   }
-}
-}
 
+  
+}
 void rgbLed (int r, int g, int b){
   analogWrite(8, r);
   analogWrite(9, b);
@@ -426,8 +439,8 @@ void caliJ1(){
 }
 
 void caliJ2(){
-  int state = limJ2.getState();
   stepper2.moveTo(-60000);
+  int state = limJ2.getState();
   if (state == HIGH){
   while (true){
       limJ2.loop();
@@ -439,21 +452,25 @@ void caliJ2(){
     }
   }
   stepper2.setCurrentPosition(0);
-  stepper2.moveTo(1600*0.05*15);
+  stepper2.moveTo(1600*0.05*15); //moves roughly 15 degrees
   stepper2.runToPosition();
   stepper2.setCurrentPosition(0);
+  J2pos = 9000;
 }
 
 void caliJ3(){
+  int state = limJ3.getState();
+  if (state == HIGH){
   stepper3.moveTo(-60000);
   while (true){
       limJ3.loop();
       stepper3.run();
-      int state = limJ3.getState();
+      state = limJ3.getState();
       if (state == LOW){
         break;
       }
     }
+  }
   stepper3.setCurrentPosition(0);
   stepper3.moveTo(1600*0.3*27);
   stepper3.runToPosition();
@@ -461,15 +478,18 @@ void caliJ3(){
 }
 
 void caliJ4(){
+  int state = limJ4.getState();
+  if (state == HIGH){
   stepper4.moveTo(60000);
   while (true){
       limJ4.loop();  
       stepper4.run();
-      int state = limJ4.getState();
+      state = limJ4.getState();
       if (state == LOW){
         break;
       }
     }
+  }
   stepper4.setCurrentPosition(0);
   stepper4.moveTo(-1600*0.7*5);
   stepper4.runToPosition();
@@ -487,22 +507,25 @@ void caliJ5(){
       }
     }
   stepper5.setCurrentPosition(0);
-  stepper5.moveTo(14*1600);
+  stepper5.moveTo(15800);
   stepper5.runToPosition();
   stepper5.setCurrentPosition(0);
+  J5pos = 0;
 }
 
 void caliJ6(){
-  digitalWrite(J6dir, HIGH);
+  int state = limJ6.getState();
+  if (state == HIGH){
   stepper6.moveTo(60000);
   while (true){
       limJ6.loop(); 
       stepper6.run();
-      int state = limJ6.getState();
+      state = limJ6.getState();
       if (state == LOW){
         break;
       }
     }
+  }
   stepper6.setCurrentPosition(0);
   stepper6.moveTo(-730);
   stepper6.runToPosition();
