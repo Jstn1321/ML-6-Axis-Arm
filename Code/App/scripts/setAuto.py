@@ -6,6 +6,7 @@ import numpy
 arduino = serial.Serial(port='COM5', baudrate=115200, timeout=1)
 time.sleep(2) 
 
-message = "a"+ '\n'
 
+message = "a"
+arduino.write(b'$')
 arduino.write(message.encode()) 
