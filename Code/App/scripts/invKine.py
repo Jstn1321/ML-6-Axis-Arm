@@ -18,10 +18,10 @@ def ik(xyz):
     invKine = JNV1_chain.inverse_kinematics(target_position=xyz, target_orientation=target_orientation,orientation_mode=orientation_axis).tolist() 
     
     print(invKine)
-
+    
     for i in range(0,len(invKine)):
         invKine[i] = math.degrees(invKine[i])
-    
+    """
     print(invKine)
     
     invKine[1] = (invKine[1]/360) * (51 * 1600 * 3)
@@ -30,10 +30,10 @@ def ik(xyz):
     invKine[5] = (invKine[5]/360) * (5 * 1600 * 3)
     invKine[6] = (invKine[6]/360) * 14 * 1600 * 3
     invKine[7] = (invKine[7]/360) * (1600)
-
+     """
     for i in range(0,len(invKine)):
         invKine[i] = int(invKine[i])
-
+    
     print(invKine)
 
     return invKine
