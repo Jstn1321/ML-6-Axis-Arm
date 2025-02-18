@@ -43,7 +43,7 @@ if (data.get("greenbox")):
     globalgy = 300 - greeny
     globalgy = (globalgy / 14) * math.pow(10, -2)
     globalgy = globalgy + zoffset
-    sendInvKine.sendInvKineToArd([globalgy,globalgx,0.2])
+    sendInvKine.sendInvKineToArd([globalgy,globalgx,0.2], 0)
     print(str(globalgx) + " , " + str(globalgy))
     
     
@@ -54,9 +54,9 @@ if (data.get("bluebox")):
     globalby = 300 - bluey + zoffset
     globalby = (globalby / 14) * math.pow(10, -2)
     print(str(globalbx) + " , " + str(globalby))
-    sendInvKine.sendInvKineToArd([globalby,globalbx,0.2])
+    sendInvKine.sendInvKineToArd([globalby,globalbx,0.2], 1)
 
-
+"""
 plt.title("Box Image")
 plt.xlabel("X pixel scaling")
 plt.ylabel("Y pixels scaling")
@@ -68,3 +68,4 @@ if data.get("greenbox"):
 image = mpimg.imread(os.path.join(os.path.dirname(__file__), "assets/takenPic/filename.jpg"))
 plt.imshow(image)
 plt.show()
+"""
