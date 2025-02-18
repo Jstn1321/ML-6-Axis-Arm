@@ -5,6 +5,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <Arduino.h>
+#include <MultiStepper.h>
+#include <stdint.h>
 
 #define J1step 41
 #define J1dir 42
@@ -29,12 +31,14 @@
 #define limitJ5 32
 #define limitJ6 33
 
-int J1pos;
-int J2pos;
-int J3pos;
-int J4pos;
-int J5pos;
-int J6pos;
+long J1pos;
+long J2pos;
+long J3pos;
+long J4pos;
+long J5pos;
+long J6pos;
+
+long home[6] = {0,0,0,0,0,0};
 
 ezButton limJ1(limitJ1);
 ezButton limJ2(limitJ2);
@@ -47,7 +51,7 @@ byte booger;
 int16_t x,y;
 uint16_t w,h;
 
-bool manual = true;
+bool manual = false;
 
 int steps[6] = {0,0,0,0,0,0};
 
@@ -64,7 +68,7 @@ int joy5y;
 int joy6x;
 int joy6y;
 
-int temp;
+long gotoposition[6];
 
 bool firstRun = true;
 
@@ -77,6 +81,9 @@ AccelStepper stepper4(1, 39, 48); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper3(1, 45, 46); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper2(1, 43, 44); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper1(1, 41, 42); // (Type of driver: with 2 pins, STEP, DIR)
+
+
+MultiStepper steppersControl;
 
 void setup() {
   pinMode(27, OUTPUT);
@@ -115,12 +122,12 @@ void setup() {
   display.display(); 
 
 
-  stepper1.setMaxSpeed(5000);
-  stepper1.setAcceleration(1000);
+  stepper1.setMaxSpeed(15000);
+  stepper1.setAcceleration(5000);
   stepper2.setMaxSpeed(1000);
   stepper2.setAcceleration(700);
-  stepper3.setMaxSpeed(8000);
-  stepper3.setAcceleration(250);
+  stepper3.setMaxSpeed(10000);
+  stepper3.setAcceleration(500);
   stepper4.setMaxSpeed(3000);
   stepper4.setAcceleration(1000);
   stepper5.setMaxSpeed(10000);
@@ -141,30 +148,40 @@ void setup() {
   limJ4.setDebounceTime(50); 
   limJ5.setDebounceTime(50); 
   limJ6.setDebounceTime(50); 
+
+  steppersControl.addStepper(stepper1);
+  steppersControl.addStepper(stepper2);
+  steppersControl.addStepper(stepper3);
+  steppersControl.addStepper(stepper4);
+  steppersControl.addStepper(stepper5);
+  steppersControl.addStepper(stepper6);
 }
 
 void loop() {
 
   if (firstRun){
-    //caliJ1(5000, 5000); //IDK HOW FAST
-    //caliJ2(); 
-    //caliJ3(); 
+    //caliJ1();
+    caliJ2(); 
+    caliJ3(); 
     //caliJ4(); 
     caliJ5(); 
     //caliJ6(); 
     firstRun = false;
     rgbLed(255,0,0);
   }
-  if (Serial.available() > 0) {
-    String receivedData = Serial.readStringUntil('\n'); 
-    if (receivedData.length() <= 1 && receivedData.equals("a")){
-      manual = false;
-    }
-    if (receivedData.length() <= 1 && receivedData.equals("m")){
-      manual = true;
+  if (Serial.available() > 0){
+    char delimiter = Serial.read();
+    if (delimiter == '$'){
+      char letter = Serial.read();
+      if (letter == 'a'){
+        manual = false;
+      }
+      else if (letter == 'm'){
+        manual = true;
+      }
+
     }
   }
-
   if (manual){
   
   rgbLed(0,255,0);
@@ -256,7 +273,6 @@ void loop() {
   }
 }
 
-  //ADJUST SPEED ACCORDINGLY I HAVENT DONE THAT YET
  if (joy2y > 700){
   digitalWrite(J4dir, HIGH);
   rgbLed(255,0,0);
@@ -342,52 +358,71 @@ void loop() {
 if (manual == false) {
   rgbLed(0,0,255);
   changeMode("Mode: Auto");
-  if (Serial.available() > 0) {
-    String receivedData = Serial.readStringUntil('\n'); 
+  if (Serial.available() > 0){
+    char delimiter = Serial.read();
 
-    int startingPoint = 0;
-    int commaPoint = 0;
-    int itemInData = 0.0; 
-    int jointAngles[8] = {0};  
-    int jointAnglesIndex = 0;
-  
-  if (receivedData.length() > 1){
-    for (int i = 0; i < receivedData.length(); i++) {
-      if (receivedData[i] == ',') {
-        commaPoint = i;
-        String temp = receivedData.substring(startingPoint, commaPoint);
-        temp.trim();
-        itemInData = temp.toInt(); 
-        if (jointAnglesIndex < 8) {  
-          jointAngles[jointAnglesIndex] = itemInData;
-          jointAnglesIndex++;
-        }
-        startingPoint = commaPoint + 1;
+if (delimiter == '#'){
+
+  if (Serial.available() >= 9 * sizeof(int16_t)) {
+
+    long jointAngles[9];
+    byte buffer[9 * sizeof(int16_t)];
+    Serial.readBytes(buffer, 9 * sizeof(int16_t));
+
+    for (int i = 0; i < 9; i++) {
+      jointAngles[i] = 0;
+      for (int j = 0; j < sizeof(int16_t); j++) {
+        jointAngles[i] |= buffer[i * sizeof(int16_t) + j] << (8 * j);
       }
     }
 
-    if (startingPoint < receivedData.length()) {
-      String temp = receivedData.substring(startingPoint);
-      temp.trim();
-      itemInData = temp.toInt();
-      if (jointAnglesIndex < 8) { 
-        jointAngles[jointAnglesIndex] = itemInData;
-        jointAnglesIndex++;
+      jointAngles[1] = long((float(jointAngles[1]) / 360.0) * (51 * 1600 * 3));
+      jointAngles[2] = long((float(jointAngles[2]) / 360.0) * (15 * 1600));
+      jointAngles[4] = long((float(jointAngles[4]) / 360.0) * 27 * 1600 * 3);
+      jointAngles[5] = long((float(jointAngles[5]) / 360.0) * (5 * 1600 * 3));
+      jointAngles[6] = long((float(jointAngles[6]) / 360.0) * 14 * 1600 * 3);
+      jointAngles[7] = long((float(jointAngles[7]) / 360.0) * (1600));
+
+      gotoposition[0] = jointAngles[1];
+      gotoposition[1] = J2pos - jointAngles[2];
+      gotoposition[2] = J3pos - jointAngles[4];
+      gotoposition[3] = jointAngles[5];
+      gotoposition[4] = J5pos - jointAngles[6];
+      gotoposition[5] = jointAngles[7];
+      
+      steppersControl.moveTo(gotoposition);
+      steppersControl.runSpeedToPosition();
+      J2pos = jointAngles[2];
+      J3pos = jointAngles[4];
+      J5pos = jointAngles[6];
+
+      //Then bring to home position
+
+      if (jointAngles[8] == 1){//Checks if it is blue
+        
       }
-    }
-    /*
-    stepper2.moveTo(J2pos - jointAngles[2]);
-    stepper2.runToPosition();
-    J2pos = jointAngles[2];
-    */
-    stepper5.moveTo(J5pos - jointAngles[6]);
-    stepper5.runToPosition();
-    J5pos = jointAngles[6];
-    }
+      else if (jointAngles[8] == 0){
+
+
+      }
+
+      /*
+      stepper2.moveTo(J2pos - jointAngles[2]);
+      stepper2.runToPosition();
+
+      stepper3.moveTo(J3pos - jointAngles[4]);
+      stepper3.runToPosition();
+
+      stepper5.moveTo(J5pos - jointAngles[6]);
+      stepper5.runToPosition();
+      */
     
     }
+
   }
 
+  }
+}
   
 }
 void rgbLed (int r, int g, int b){
@@ -423,17 +458,17 @@ void changeMode (String message){
 }
 
 void caliJ1(){
+  stepper1.moveTo(250000);
   while (true){
       limJ1.loop();
-      digitalWrite(J1step,HIGH);     
       int state = limJ1.getState();
-      digitalWrite(J1step,LOW); 
+      stepper1.run();
       if (state == LOW){
         break;
       }
     }
   stepper1.setCurrentPosition(0);
-  stepper1.moveTo(1600*0.25*51);
+  stepper1.moveTo(-1600*0.4*51*3);
   stepper1.runToPosition();
   stepper1.setCurrentPosition(0);
 }
@@ -461,7 +496,7 @@ void caliJ2(){
 void caliJ3(){
   int state = limJ3.getState();
   if (state == HIGH){
-  stepper3.moveTo(-60000);
+  stepper3.moveTo(-130000);
   while (true){
       limJ3.loop();
       stepper3.run();
@@ -472,9 +507,10 @@ void caliJ3(){
     }
   }
   stepper3.setCurrentPosition(0);
-  stepper3.moveTo(1600*0.3*27);
+  stepper3.moveTo(1600*0.065*27*3); // MAKE IT SO THAT IT GOES TO 90 DEGREES
   stepper3.runToPosition();
   stepper3.setCurrentPosition(0);
+  J3pos = -32400;
 }
 
 void caliJ4(){
@@ -491,13 +527,13 @@ void caliJ4(){
     }
   }
   stepper4.setCurrentPosition(0);
-  stepper4.moveTo(-1600*0.7*5);
+  stepper4.moveTo(-1600*0.65*5);
   stepper4.runToPosition();
   stepper4.setCurrentPosition(0);
 }
 
 void caliJ5(){
-  stepper5.moveTo(-60000);
+  stepper5.moveTo(-80000);
   while (true){
       limJ5.loop();
       stepper5.run();
@@ -507,10 +543,10 @@ void caliJ5(){
       }
     }
   stepper5.setCurrentPosition(0);
-  stepper5.moveTo(15800);
+  stepper5.moveTo(0.4 * 1600 * 3 * 14);
   stepper5.runToPosition();
   stepper5.setCurrentPosition(0);
-  J5pos = 0;
+  J5pos = -14933;
 }
 
 void caliJ6(){
