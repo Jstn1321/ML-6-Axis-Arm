@@ -2,6 +2,7 @@ import serial
 import time
 import invKine
 import numpy
+import struct
 
 arduino = serial.Serial(port='COM5', baudrate=115200, timeout=1)
 time.sleep(2)  
@@ -21,6 +22,26 @@ while True:
         jointAngles = list(map(float, response.split(',')))
         print(jointAngles)
 """
-def sendInvKineToArd (list = []):
+def sendInvKineToArd (list = [], isblue = 0):
+    degrees = invKine.ik(list)
+    degrees.append(isblue)
+    data_string = struct.pack('<9h', *degrees)
+    arduino.write(b'#')
+    arduino.write(data_string) 
+    """
+    #for i in range(50):
     data_string = ','.join(map(str, invKine.ik(list))) + '\n'
     arduino.write(data_string.encode()) 
+    
+    while True:
+        response = arduino.readline().decode().strip()
+        print(response)
+    """
+    """
+    while  True:
+        data_string = ','.join(map(str, invKine.ik(list))) + '\n'
+        arduino.write(data_string.encode())
+        response = arduino.readline().decode().strip()
+        print(response)
+    """
+    
