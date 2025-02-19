@@ -70,7 +70,7 @@ int joy6x;
 int joy6y;
 
 long blueSorted[6] = {-15640, 9000 - 1400, -32400 - (-10080), 0, -14933 - (-15306), 0};
-long greenSorted[6] = {19720, 1400, -10080, 0, -15306, 0};
+long greenSorted[6] = {19720, 9000 - 1400, -32400 - (-10080), 0, -14933 - (-15306), 0};
 long gotoposition[6];
 
 bool firstRun = true;
