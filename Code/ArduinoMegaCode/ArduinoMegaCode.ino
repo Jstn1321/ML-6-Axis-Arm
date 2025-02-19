@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include <MultiStepper.h>
 #include <stdint.h>
+#include <Servo.h>
 
 #define J1step 41
 #define J1dir 42
@@ -19,7 +20,7 @@
 #define J5step 49
 #define J5dir 50
 #define J6step 51
-#define J6dir 52
+#define J6dir 52 
 
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
@@ -68,6 +69,8 @@ int joy5y;
 int joy6x;
 int joy6y;
 
+long blueSorted[6] = {-15640, 1400, -10080, 0, -15306, 0};
+long greenSorted[6] = {19720, 1400, -10080, 0, -15306, 0};
 long gotoposition[6];
 
 bool firstRun = true;
@@ -82,10 +85,12 @@ AccelStepper stepper3(1, 45, 46); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper2(1, 43, 44); // (Type of driver: with 2 pins, STEP, DIR)
 AccelStepper stepper1(1, 41, 42); // (Type of driver: with 2 pins, STEP, DIR)
 
+Servo gripper;
 
 MultiStepper steppersControl;
 
 void setup() {
+  gripper.attach(7);
   pinMode(27, OUTPUT);
   pinMode(14, OUTPUT);
   pinMode(25, OUTPUT);
@@ -399,11 +404,12 @@ if (delimiter == '#'){
       //Then bring to home position
 
       if (jointAngles[8] == 1){//Checks if it is blue
-        
+        steppersControl.moveTo(blueSorted);
+        steppersControl.runSpeedToPosition();
       }
       else if (jointAngles[8] == 0){
-
-
+        steppersControl.moveTo(greenSorted);
+        steppersControl.runSpeedToPosition();
       }
 
       /*
