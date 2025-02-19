@@ -69,7 +69,7 @@ int joy5y;
 int joy6x;
 int joy6y;
 
-long blueSorted[6] = {-15640, 1400, -10080, 0, -15306, 0};
+long blueSorted[6] = {-15640, 9000 - 1400, -32400 - (-10080), 0, -14933 - (-15306), 0};
 long greenSorted[6] = {19720, 1400, -10080, 0, -15306, 0};
 long gotoposition[6];
 
@@ -423,6 +423,9 @@ while (manual == false) {
         delay(2000);
         steppersControl.moveTo(home);
         steppersControl.runSpeedToPosition();
+        J2pos = 9000;
+        J3pos = -32400;
+        J5pos = -14933;
 
         if (jointAngles[8] == 1){//Checks if it is blue
             steppersControl.moveTo(blueSorted);
@@ -430,6 +433,9 @@ while (manual == false) {
             delay(2000);
             steppersControl.moveTo(home);
             steppersControl.runSpeedToPosition();
+            J2pos = 9000;
+            J3pos = -32400;
+            J5pos = -14933;
         }
         else if (jointAngles[8] == 0){
             steppersControl.moveTo(greenSorted);
@@ -437,6 +443,9 @@ while (manual == false) {
             delay(2000);
             steppersControl.moveTo(home);
             steppersControl.runSpeedToPosition();
+            J2pos = 9000;
+            J3pos = -32400;
+            J5pos = -14933;
         }
    }
   }
