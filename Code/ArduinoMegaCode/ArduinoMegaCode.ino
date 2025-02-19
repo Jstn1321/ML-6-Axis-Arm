@@ -165,12 +165,12 @@ void setup() {
 void loop() {
 
   if (firstRun){
-    //caliJ1();
+    caliJ1();
     caliJ2(); 
     caliJ3(); 
-    //caliJ4(); 
+    caliJ4(); 
     caliJ5(); 
-    //caliJ6(); 
+    caliJ6(); 
     firstRun = false;
     rgbLed(255,0,0);
   }
@@ -187,7 +187,7 @@ void loop() {
 
     }
   }
-  if (manual){
+  while (manual){
   
   rgbLed(0,255,0);
   changeStatus("Status: Idle");
@@ -198,6 +198,16 @@ void loop() {
   joy2y = analogRead(A3);
   joy3x = analogRead(A4);
   joy3y = analogRead(A5);
+
+  if (Serial.available() > 0){
+    char delimiter = Serial.read();
+    if (delimiter == '$'){
+      char letter = Serial.read();
+      if (letter == 'a'){
+        manual = false;
+      }
+    }
+  }
 
   if (joy1x > 700){
     rgbLed(255,0,0);
@@ -360,74 +370,77 @@ void loop() {
     }
   }
   
-if (manual == false) {
-  rgbLed(0,0,255);
-  changeMode("Mode: Auto");
-  if (Serial.available() > 0){
-    char delimiter = Serial.read();
+while (manual == false) {
+    rgbLed(0,0,255);
+    changeMode("Mode: Auto");
+    if (Serial.available() > 0){
 
-if (delimiter == '#'){
-
-  if (Serial.available() >= 9 * sizeof(int16_t)) {
-
-    long jointAngles[9];
-    byte buffer[9 * sizeof(int16_t)];
-    Serial.readBytes(buffer, 9 * sizeof(int16_t));
-
-    for (int i = 0; i < 9; i++) {
-      jointAngles[i] = 0;
-      for (int j = 0; j < sizeof(int16_t); j++) {
-        jointAngles[i] |= buffer[i * sizeof(int16_t) + j] << (8 * j);
+        char delimiter = Serial.read();
+        
+    if (delimiter == '$'){
+      char letter = Serial.read();
+      if (letter == 'm'){
+        manual = true;
       }
-    }
+     }
 
-      jointAngles[1] = long((float(jointAngles[1]) / 360.0) * (51 * 1600 * 3));
-      jointAngles[2] = long((float(jointAngles[2]) / 360.0) * (15 * 1600));
-      jointAngles[4] = long((float(jointAngles[4]) / 360.0) * 27 * 1600 * 3);
-      jointAngles[5] = long((float(jointAngles[5]) / 360.0) * (5 * 1600 * 3));
-      jointAngles[6] = long((float(jointAngles[6]) / 360.0) * 14 * 1600 * 3);
-      jointAngles[7] = long((float(jointAngles[7]) / 360.0) * (1600));
+    if (delimiter == '#'){
 
-      gotoposition[0] = jointAngles[1];
-      gotoposition[1] = J2pos - jointAngles[2];
-      gotoposition[2] = J3pos - jointAngles[4];
-      gotoposition[3] = jointAngles[5];
-      gotoposition[4] = J5pos - jointAngles[6];
-      gotoposition[5] = jointAngles[7];
-      
-      steppersControl.moveTo(gotoposition);
-      steppersControl.runSpeedToPosition();
-      J2pos = jointAngles[2];
-      J3pos = jointAngles[4];
-      J5pos = jointAngles[6];
+    if (Serial.available() >= 9 * sizeof(int16_t)) {
 
-      //Then bring to home position
+        long jointAngles[9];
+        byte buffer[9 * sizeof(int16_t)];
+        Serial.readBytes(buffer, 9 * sizeof(int16_t));
 
-      if (jointAngles[8] == 1){//Checks if it is blue
-        steppersControl.moveTo(blueSorted);
+        for (int i = 0; i < 9; i++) {
+            jointAngles[i] = 0;
+        for (int j = 0; j < sizeof(int16_t); j++) {
+            jointAngles[i] |= buffer[i * sizeof(int16_t) + j] << (8 * j);
+            }
+        }
+
+        jointAngles[1] = long((float(jointAngles[1]) / 360.0) * (51 * 1600 * 3));
+        jointAngles[2] = long((float(jointAngles[2]) / 360.0) * (15 * 1600));
+        jointAngles[4] = long((float(jointAngles[4]) / 360.0) * 27 * 1600 * 3);
+        jointAngles[5] = long((float(jointAngles[5]) / 360.0) * (5 * 1600 * 3));
+        jointAngles[6] = long((float(jointAngles[6]) / 360.0) * 14 * 1600 * 3);
+        jointAngles[7] = long((float(jointAngles[7]) / 360.0) * (1600));
+
+        gotoposition[0] = jointAngles[1];
+        gotoposition[1] = J2pos - jointAngles[2];
+        gotoposition[2] = J3pos - jointAngles[4];
+        gotoposition[3] = jointAngles[5];
+        gotoposition[4] = J5pos - jointAngles[6];
+        gotoposition[5] = jointAngles[7];
+        
+        steppersControl.moveTo(gotoposition);
         steppersControl.runSpeedToPosition();
-      }
-      else if (jointAngles[8] == 0){
-        steppersControl.moveTo(greenSorted);
+        J2pos = jointAngles[2];
+        J3pos = jointAngles[4];
+        J5pos = jointAngles[6];
+        
+        //Then bring to home position
+        delay(2000);
+        steppersControl.moveTo(home);
         steppersControl.runSpeedToPosition();
-      }
 
-      /*
-      stepper2.moveTo(J2pos - jointAngles[2]);
-      stepper2.runToPosition();
-
-      stepper3.moveTo(J3pos - jointAngles[4]);
-      stepper3.runToPosition();
-
-      stepper5.moveTo(J5pos - jointAngles[6]);
-      stepper5.runToPosition();
-      */
-    
-    }
-
+        if (jointAngles[8] == 1){//Checks if it is blue
+            steppersControl.moveTo(blueSorted);
+            steppersControl.runSpeedToPosition();
+            delay(2000);
+            steppersControl.moveTo(home);
+            steppersControl.runSpeedToPosition();
+        }
+        else if (jointAngles[8] == 0){
+            steppersControl.moveTo(greenSorted);
+            steppersControl.runSpeedToPosition();
+            delay(2000);
+            steppersControl.moveTo(home);
+            steppersControl.runSpeedToPosition();
+        }
+   }
   }
-
-  }
+ }
 }
   
 }
