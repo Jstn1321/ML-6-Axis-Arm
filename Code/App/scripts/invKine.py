@@ -21,7 +21,7 @@ def ik(xyz):
     
     for i in range(0,len(invKine)):
         invKine[i] = math.degrees(invKine[i])
-    """
+    
     print(invKine)
     
     invKine[1] = (invKine[1]/360) * (51 * 1600 * 3)
@@ -30,7 +30,7 @@ def ik(xyz):
     invKine[5] = (invKine[5]/360) * (5 * 1600 * 3)
     invKine[6] = (invKine[6]/360) * 14 * 1600 * 3
     invKine[7] = (invKine[7]/360) * (1600)
-     """
+    
     for i in range(0,len(invKine)):
         invKine[i] = int(invKine[i])
     
@@ -40,3 +40,6 @@ def ik(xyz):
 
 #ik([0.4,0.0,0.2])
 #Z,X,Y
+#ik([0.4, -0.2, 0.2])
+#ik([0.357, -0.16, 0.2])
+#ik([0.357, 0.16, 0.2])
