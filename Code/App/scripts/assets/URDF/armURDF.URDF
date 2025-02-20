@@ -119,7 +119,7 @@
 		<child link = "wrist"/>
 		<origin xyz = "0 0 0.10933" rpy = "0 0 0"/>
 		<axis xyz = "0 -1 0"/>
-        <limit lower="-1.57" upper="1.57"/>
+        <limit lower="-1.39626" upper="1.57"/>
 	</joint>
 
 	<link name = "gripper">
