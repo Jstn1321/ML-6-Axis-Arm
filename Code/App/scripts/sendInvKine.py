@@ -25,7 +25,7 @@ while True:
 def sendInvKineToArd (list = [], isblue = 0):
     degrees = invKine.ik(list)
     degrees.append(isblue)
-    data_string = struct.pack('<9h', *degrees)
+    data_string = struct.pack('<9l', *degrees)
     arduino.write(b'#')
     arduino.write(data_string) 
     """
