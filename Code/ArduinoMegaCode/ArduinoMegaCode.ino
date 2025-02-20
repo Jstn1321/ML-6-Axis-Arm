@@ -39,7 +39,7 @@ long J4pos;
 long J5pos;
 long J6pos;
 
-long home[6] = {0,0,0,0,0,0};
+
 
 ezButton limJ1(limitJ1);
 ezButton limJ2(limitJ2);
@@ -69,9 +69,19 @@ int joy5y;
 int joy6x;
 int joy6y;
 
-long blueSorted[6] = {-15640, 9000 - 1400, -32400 - (-10080), 0, -14933 - (-15306), 0};
-long greenSorted[6] = {19720, 9000 - 1400, -32400 - (-10080), 0, -14933 - (-15306), 0};
-long gotoposition[6];
+long blueSorted[6] = {-13952, 9000 - 2773, -32400 - (-24757), 0, -14933 - (-11738), 0};
+long greenSorted[6] = {18876, 9000 - 2767, -32400 - (-24683), 0, -14933 - (-11757), 0};
+long gotoposition[6] = {0,0,0,0,0,0};
+long jointAngles[9] = {0,0,0,0,0,0,0,0,0};
+long home[6] = {0,0,0,0,0,0};
+long test[6] = {-2451, 9000 - 3915, -32400 - (-36034), 0, -14933 - (-9086), 0};
+
+long temp1;
+long temp2;
+long temp3;
+long temp4;
+long temp5;
+long temp6;
 
 bool firstRun = true;
 
@@ -107,7 +117,7 @@ void setup() {
   pinMode(A0, INPUT);
   pinMode(A1, INPUT);
     if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
-    Serial.println(F("SSD1306 allocation failed"));
+    //Serial.println(F("SSD1306 allocation failed"));
     for(;;);
   }
   delay(2000);
@@ -132,7 +142,7 @@ void setup() {
   stepper2.setMaxSpeed(1000);
   stepper2.setAcceleration(700);
   stepper3.setMaxSpeed(10000);
-  stepper3.setAcceleration(500);
+  stepper3.setAcceleration(250);
   stepper4.setMaxSpeed(3000);
   stepper4.setAcceleration(1000);
   stepper5.setMaxSpeed(10000);
@@ -386,33 +396,38 @@ while (manual == false) {
 
     if (delimiter == '#'){
 
-    if (Serial.available() >= 9 * sizeof(int16_t)) {
+    if (Serial.available() >= 9 * sizeof(long)) {
 
-        long jointAngles[9];
-        byte buffer[9 * sizeof(int16_t)];
-        Serial.readBytes(buffer, 9 * sizeof(int16_t));
+        
+        byte buffer[9 * sizeof(long)];
+        Serial.readBytes(buffer, 9 * sizeof(long));
 
         for (int i = 0; i < 9; i++) {
             jointAngles[i] = 0;
-        for (int j = 0; j < sizeof(int16_t); j++) {
-            jointAngles[i] |= buffer[i * sizeof(int16_t) + j] << (8 * j);
+        for (int j = 0; j < sizeof(long); j++) {
+            jointAngles[i] |= ((long)buffer[i * sizeof(long) + j]) << (8 * j);
             }
         }
 
-        jointAngles[1] = long((float(jointAngles[1]) / 360.0) * (51 * 1600 * 3));
-        jointAngles[2] = long((float(jointAngles[2]) / 360.0) * (15 * 1600));
-        jointAngles[4] = long((float(jointAngles[4]) / 360.0) * 27 * 1600 * 3);
-        jointAngles[5] = long((float(jointAngles[5]) / 360.0) * (5 * 1600 * 3));
-        jointAngles[6] = long((float(jointAngles[6]) / 360.0) * 14 * 1600 * 3);
-        jointAngles[7] = long((float(jointAngles[7]) / 360.0) * (1600));
+        steppersControl.moveTo(home);
+        steppersControl.runSpeedToPosition();
 
-        gotoposition[0] = jointAngles[1];
-        gotoposition[1] = J2pos - jointAngles[2];
-        gotoposition[2] = J3pos - jointAngles[4];
-        gotoposition[3] = jointAngles[5];
-        gotoposition[4] = J5pos - jointAngles[6];
-        gotoposition[5] = jointAngles[7];
-        
+        delay(2000);
+
+        temp1 = jointAngles[1];
+        temp2 = J2pos - jointAngles[2];
+        temp3 = J3pos - jointAngles[4];
+        temp4 = jointAngles[5];
+        temp5 = J5pos - jointAngles[6];
+        temp6 = jointAngles[7];
+
+        gotoposition[0] = temp1;
+        gotoposition[1] = temp2;
+        gotoposition[2] = temp3;
+        gotoposition[3] = temp4;
+        gotoposition[4] = temp5;
+        gotoposition[5] = temp6;
+
         steppersControl.moveTo(gotoposition);
         steppersControl.runSpeedToPosition();
         J2pos = jointAngles[2];
