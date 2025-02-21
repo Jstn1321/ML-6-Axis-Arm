@@ -17,12 +17,12 @@ orientation_axis = "Z"
 def ik(xyz):
     invKine = JNV1_chain.inverse_kinematics(target_position=xyz, target_orientation=target_orientation,orientation_mode=orientation_axis).tolist() 
     
-    print(invKine)
+    print("Radians: " + str(invKine))
     
     for i in range(0,len(invKine)):
         invKine[i] = math.degrees(invKine[i])
     
-    print(invKine)
+    print("Degrees: " + str(invKine))
     
     invKine[1] = (invKine[1]/360) * (51 * 1600 * 3)
     invKine[2] = (invKine[2]/360) * (15* 1600)
@@ -34,7 +34,7 @@ def ik(xyz):
     for i in range(0,len(invKine)):
         invKine[i] = int(invKine[i])
     
-    print(invKine)
+    print("Steps for motors: " + str(invKine))
 
     return invKine
 
@@ -43,3 +43,4 @@ def ik(xyz):
 #ik([0.4, -0.2, 0.2])
 #ik([0.357, -0.16, 0.2])
 #ik([0.357, 0.16, 0.2])
+#ik([])
