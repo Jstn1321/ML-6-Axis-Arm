@@ -52,7 +52,7 @@ byte booger;
 int16_t x,y;
 uint16_t w,h;
 
-bool manual = false;
+bool manual = true;
 
 int steps[6] = {0,0,0,0,0,0};
 
@@ -120,6 +120,7 @@ void setup() {
     //Serial.println(F("SSD1306 allocation failed"));
     for(;;);
   }
+  gripper.write(180);
   delay(2000);
   display.clearDisplay();
 
@@ -137,14 +138,14 @@ void setup() {
   display.display(); 
 
 
-  stepper1.setMaxSpeed(15000);
+  stepper1.setMaxSpeed(20000);
   stepper1.setAcceleration(5000);
-  stepper2.setMaxSpeed(1000);
-  stepper2.setAcceleration(700);
+  stepper2.setMaxSpeed(800);
+  stepper2.setAcceleration(200);
   stepper3.setMaxSpeed(10000);
   stepper3.setAcceleration(250);
-  stepper4.setMaxSpeed(3000);
-  stepper4.setAcceleration(1000);
+  stepper4.setMaxSpeed(2000);
+  stepper4.setAcceleration(500);
   stepper5.setMaxSpeed(10000);
   stepper5.setAcceleration(1000);
   stepper6.setMaxSpeed(500);
@@ -174,16 +175,7 @@ void setup() {
 
 void loop() {
 
-  if (firstRun){
-    caliJ1();
-    caliJ2(); 
-    caliJ3(); 
-    caliJ4(); 
-    caliJ5(); 
-    caliJ6(); 
-    firstRun = false;
-    rgbLed(255,0,0);
-  }
+  
   if (Serial.available() > 0){
     char delimiter = Serial.read();
     if (delimiter == '$'){
@@ -381,8 +373,22 @@ void loop() {
   }
   
 while (manual == false) {
+
+    if (firstRun){
+    caliJ1();
+    caliJ2(); 
+    caliJ3(); 
+    caliJ4(); 
+    caliJ5(); 
+    caliJ6(); 
+    firstRun = false;
+    rgbLed(255,0,0);
+  }
+
     rgbLed(0,0,255);
     changeMode("Mode: Auto");
+    
+    
     if (Serial.available() > 0){
 
         char delimiter = Serial.read();
@@ -433,19 +439,22 @@ while (manual == false) {
         J2pos = jointAngles[2];
         J3pos = jointAngles[4];
         J5pos = jointAngles[6];
-        
+        delay(500);
+        gripper.write(180);
         //Then bring to home position
-        delay(2000);
+        delay(1000);
         steppersControl.moveTo(home);
         steppersControl.runSpeedToPosition();
         J2pos = 9000;
         J3pos = -32400;
         J5pos = -14933;
+        delay(1000);
 
         if (jointAngles[8] == 1){//Checks if it is blue
             steppersControl.moveTo(blueSorted);
             steppersControl.runSpeedToPosition();
-            delay(2000);
+            delay(1000);
+            gripper.write(0);
             steppersControl.moveTo(home);
             steppersControl.runSpeedToPosition();
             J2pos = 9000;
@@ -455,7 +464,8 @@ while (manual == false) {
         else if (jointAngles[8] == 0){
             steppersControl.moveTo(greenSorted);
             steppersControl.runSpeedToPosition();
-            delay(2000);
+            delay(1000);
+            gripper.write(0);
             steppersControl.moveTo(home);
             steppersControl.runSpeedToPosition();
             J2pos = 9000;
@@ -550,7 +560,7 @@ void caliJ3(){
     }
   }
   stepper3.setCurrentPosition(0);
-  stepper3.moveTo(1600*0.065*27*3); // MAKE IT SO THAT IT GOES TO 90 DEGREES
+  stepper3.moveTo((1600*0.065*27*3) + 31400); // MAKE IT SO THAT IT GOES TO 90 DEGREES
   stepper3.runToPosition();
   stepper3.setCurrentPosition(0);
   J3pos = -32400;
