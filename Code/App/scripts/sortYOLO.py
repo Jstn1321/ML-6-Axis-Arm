@@ -33,7 +33,7 @@ print(greenCoord)
 #1cm is roughly 13-14px for 300x300 image and with the stand
 #sendInvKine.sendInvKineToArd([0.4,0.0,0.2])
 #z,x,y
-print(str(bluex) + " , " + str(bluey)+ " , " + str(greenx)+ " , " + str(greeny))
+print("Pixel Coords: " + str(bluex) + " , " + str(bluey)+ " , " + str(greenx)+ " , " + str(greeny))
 
 zoffset = 0.25
 
@@ -44,7 +44,7 @@ if (data.get("greenbox")):
     globalgy = (globalgy / 14) * math.pow(10, -2)
     globalgy = globalgy + zoffset
     sendInvKine.sendInvKineToArd([globalgy,globalgx,0.2], 0)
-    print(str(globalgx) + " , " + str(globalgy))
+    print("Box Coords: "+ str(globalgx) + " , " + str(globalgy) + " , " + "0.2")
     
     
 
@@ -53,7 +53,7 @@ if (data.get("bluebox")):
     globalbx = (globalbx / 14) * math.pow(10, -2)
     globalby = 300 - bluey + zoffset
     globalby = (globalby / 14) * math.pow(10, -2)
-    print(str(globalbx) + " , " + str(globalby))
+    print("Box Coords: " + str(globalbx) + " , " + str(globalby) + " , " + "0.2")
     sendInvKine.sendInvKineToArd([globalby,globalbx,0.2], 1)
 
 """
