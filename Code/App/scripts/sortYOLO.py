@@ -35,7 +35,7 @@ print(greenCoord)
 #z,x,y
 print("Pixel Coords: " + str(bluex) + " , " + str(bluey)+ " , " + str(greenx)+ " , " + str(greeny))
 
-zoffset = 0.25
+zoffset = 0.17
 
 if (data.get("greenbox")):
     globalgx = 150 - greenx
