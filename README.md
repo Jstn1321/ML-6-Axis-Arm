@@ -19,7 +19,9 @@ _Under construction_
 
 # **How to use**
 
-_Under construction_
+-Launch up the app and ensure arduino and camera are connected to computer
+
+-
 
 # **Demo**
 
