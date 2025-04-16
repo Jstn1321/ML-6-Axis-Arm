@@ -19,9 +19,11 @@ _Under construction_
 
 # **How to use**
 
--Launch up the app and ensure arduino and camera are connected to computer
+<h5> For Manual Control</h5>
+<h5> For Automatic Control</h5>
+- Launch up the app and ensure arduino and camera are connected to computer
 
--
+- 
 
 # **Demo**
 
