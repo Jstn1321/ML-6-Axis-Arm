@@ -20,7 +20,7 @@ _Under construction_
 # **How to use**
 
 <h3> For Manual Control</h3>
-1. Launch up the app and ensure arduino and camera are connected to computer
+1.Launch up the app and ensure arduino and camera are connected to computer
 
 2. Select Manual Button on the sidebar and use the joysticks to control the arm
 <h3> For Automatic Control</h3>
@@ -33,7 +33,7 @@ _Under construction_
 5. Press "Identify"
 # **Demo**
 Watch the robot arm sort two boxes:
-[![RobotArmSortingBoxes](https://img.youtube.com/vi/RnRYXaKSuSA/0.jpg)](https://youtu.be/RnRYXaKSuSA)
+[![RobotArmSortingBoxes](https://img.youtube.com/vi/RnRYXaKSuSA/0.jpg)](https://www.youtube.com/watch?v=RnRYXaKSuSA)
 # **Photoshoot**
 ![Pic of Arm](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/20241027_181017.jpg?raw=true)
 # **Credits**
