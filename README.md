@@ -20,17 +20,16 @@ _Under construction_
 # **How to use**
 
 <h3> For Manual Control</h3>
-1.Launch up the app and ensure arduino and camera are connected to computer
+  1.Launch up the app and ensure arduino and camera are connected to computer
 
-2. Select Manual Button on the sidebar and use the joysticks to control the arm
+  2. Select Manual Button on the sidebar and use the joysticks to control the arm
 <h3> For Automatic Control</h3>
-1. Launch up the app and ensure arduino and camera are connected to computer
-
-2. Select the Automatic Button on the sidebar
-   
-4. Select "Take a Picture" to use the camera to take a picture of the items you wish to sort
-   
-5. Press "Identify"
+  1. Launch up the app and ensure arduino and camera are connected to computer
+  2. Select the Automatic Button on the sidebar
+  4. Select "Take a Picture" to use the camera to take a picture of the items you wish to sort
+  5. Press "Identify"
+   ![til](https://raw.githubusercontent.com/hashrocket/hr-til/master/app/assets/images/banner.png)
+6. 
 # **Demo**
 Watch the robot arm sort two boxes:
 
