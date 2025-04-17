@@ -31,7 +31,7 @@ _Under construction_
   4. Press "Identify"
      
      
-   ![til](https://raw.githubusercontent.com/hashrocket/hr-til/master/app/assets/images/banner.png)
+   ![til](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/clickIdentify.gif?raw=true)
 7. 
 # **Demo**
 Watch the robot arm sort two boxes:
