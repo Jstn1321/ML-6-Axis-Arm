@@ -30,8 +30,10 @@ _Under construction_
 2. Select the automatic button on the sidebar
 3. Press the "Take a Picture" Button to grab a picture of the items you want to sort
 4. Select "Identify" for object recognition
- ![til](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/clickIdentify.gif?raw=true)
+ ![idGIF](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/clickIdentify.gif?raw=true)
 5. Select "Sort" to make the arm sort all the objects
+   ![sortGIF](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/sortgif.gif?raw=true)
+   It should print out inverse kinemetics and the robot arm should begin to move
 
 
 
