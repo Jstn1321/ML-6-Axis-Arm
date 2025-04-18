@@ -20,19 +20,20 @@ _Under construction_
 # **How to use**
 
 <h3> For Manual Control</h3>
-1. Launch up the app and ensure arduino and camera are connected to computer
-    
-2. Select Manual Button on the sidebar and use the joysticks to control the arm
+1. Launch up the app and ensure the camera is connected to the computer
+2. Select the manual button on the sidebar and use the joysticks to manually control each joint on the robot
+
 <h3> For Automatic Control</h3>
-1. Launch up the app and ensure arduino and camera are connected to computer
-    
-2. Select the Automatic Button on the sidebar
-3. Select "Take a Picture" to use the camera to take a picture of the items you wish to sort
-4. Press "Identify"
-     
-     
-   ![til](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/clickIdentify.gif?raw=true)
-7. 
+
+1. Launch up the app and ensure the camera is connected to the computer
+2. Select the automatic button on the sidebar
+3. Press the "Take a Picture" Button to grab a picture of the items you want to sort
+4. Select "Identify" for object recognition
+ ![til](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/clickIdentify.gif?raw=true)
+5. Select "Sort" to make the arm sort all the objects
+
+
+
 # **Demo**
 Watch the robot arm sort two boxes:
 
