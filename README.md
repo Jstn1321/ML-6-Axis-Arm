@@ -20,10 +20,10 @@ _Under construction_
 # **How to use**
 
 <h3> For Manual Control</h3>
-  1.Launch up the app and ensure arduino and camera are connected to computer
+    1.Launch up the app and ensure arduino and camera are connected to computer
   2. Select Manual Button on the sidebar and use the joysticks to control the arm
 <h3> For Automatic Control</h3>
-  1. Launch up the app and ensure arduino and camera are connected to compute
+    1. Launch up the app and ensure arduino and camera are connected to compute
   2. Select the Automatic Button on the sidebar
   3. Select "Take a Picture" to use the camera to take a picture of the items you wish to sort
   4. Press "Identify"
