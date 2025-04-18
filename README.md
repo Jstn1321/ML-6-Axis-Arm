@@ -22,6 +22,8 @@ _Under construction_
 <h3> For Manual Control</h3>
 1. Launch up the app and ensure the camera is connected to the computer
 2. Select the manual button on the sidebar and use the joysticks to manually control each joint on the robot
+1. Launch up the app and ensure the camera is connected to the computer
+2. Select the automatic button on the sidebar
 
 <h3> For Automatic Control</h3>
 
