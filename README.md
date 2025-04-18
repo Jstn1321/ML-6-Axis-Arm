@@ -33,6 +33,7 @@ _Under construction_
  ![idGIF](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/clickIdentify.gif?raw=true)
 5. Select "Sort" to make the arm sort all the objects
    ![sortGIF](https://github.com/Jstn1321/ML-6-Axis-Arm/blob/main/Photoshoot/sortgif.gif?raw=true)
+   
    It should print out inverse kinemetics and the robot arm should begin to move
 
 
