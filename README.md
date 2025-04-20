@@ -13,6 +13,8 @@
   <a href="#credits">Credits</a>
 </p>
 
+**NOTE: THIS IS MADE BY A HIGH SCHOOLER DO NOT EXPECT ALOT＊＊
+
 # **Assembly**
 
 _Under construction_
