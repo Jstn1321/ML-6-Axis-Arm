@@ -13,7 +13,8 @@
   <a href="#credits">Credits</a>
 </p>
 
-**NOTE: THIS IS MADE BY A HIGH SCHOOLER DO NOT EXPECT ALOT＊＊
+> [!Caution]
+> This was designed by a high schooler do not expect assembly to be easy or documentation to be abundent!
 
 # **Assembly**
 
