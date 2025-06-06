@@ -13,9 +13,6 @@
   <a href="#credits">Credits</a>
 </p>
 
-> [!Caution]
-> Documentation is sparce
-
 # **Assembly**
 
 _Under construction_
