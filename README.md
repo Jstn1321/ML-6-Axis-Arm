@@ -14,7 +14,7 @@
 </p>
 
 > [!Caution]
-> This was designed by a high schooler do not expect assembly to be easy or documentation to be abundent!
+> Documentation is sparce
 
 # **Assembly**
 
