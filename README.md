@@ -13,6 +13,9 @@
   <a href="#credits">Credits</a>
 </p>
 
+<img width="1146" height="852" alt="image" src="https://github.com/user-attachments/assets/e6455c85-fcc7-42bc-9ba2-46d373e53775" />
+
+
 # **Assembly**
 
 _Under construction_
